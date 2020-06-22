@@ -6,15 +6,18 @@
 
 ## State
 
-    - listOfMethods: [{Method}] = null
+    - listOfMethods: [{Method}] = Null
     - methodManagement: {active: Boolean, methodId: Int Or Null} = {active: False, methodId: Null}
 
 ## Render
 
-    - premier block
-    - title
-    - table
-        - {listOfMethods.map(method)}
-            - ...
-            - button [onClick] : {methodManagement = {active: True, methodId: method.id}}
-            - button [onClick] : {deleteMethod(method.id)}
+    - First block
+        - Title
+        - Table
+            - {listOfMethods.map(method)}
+                - ...
+                - button [onClick] : {methodManagement = {active: True, methodId: method.id}}
+                - button [onClick] : {deleteMethod(method.id)}
+    - Second block (show if (methodManagement.active))
+        - Title
+        - Component -- MethodManagement(methodManagement, close(), actualize())
