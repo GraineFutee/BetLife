@@ -2,12 +2,12 @@
 
 ## Get data
 
-    - listOfMethods: [{Method}]
+- listOfMethods: [{Method}]
 
 ## State
 
-    - listOfMethods: [{Method}] = null
-    - methodManagement: {active: Boolean, methodId: Int Or Null} = {active: False, methodId: Null}
+- listOfMethods: [{Method}] = null
+- methodManagement: {active: Boolean, methodId: Int Or Null} = {active: False, methodId: Null}
 
 ## Render
 
