@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hello Bulma!</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"
+    />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav
+      class="navbar is-primary"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
+        <a class="navbar-item">
+          BetLife
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item">
+            My Methods
+          </a>
+
+          <a class="navbar-item">
+            Roger &nbsp;<i class="fas fa-caret-down"></i>
+          </a>
+        </div>
+      </div>
+    </nav>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">My Methods</h1>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Focus draw</th>
+              <td>20/06/2020</td>
+              <td>
+                2€ on Draw for home odd between 1 & 2.3
+              </td>
+
+              <td>
+                <a class="button is-info">Modify</a>
+              </td>
+              <td>
+                <a class="button is-danger">Delete</a>
+              </td>
+            </tr>
+            <tr>
+              <th>Method_name</th>
+              <td>Methode_creation</td>
+              <td>
+                Method_resume
+              </td>
+
+              <td>
+                <a class="button is-info">Modify</a>
+              </td>
+              <td>
+                <a class="button is-danger">Delete</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a class="button is-success is-small" onclick="showNewMethod()"
+                  ><i class="fas fa-plus-circle"></i
+                ></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="section" id="newMethod" style="display: none;">
+      <div class="container">
+        <h1 class="title">New Method</h1>
+        <form>
+          <div class="field">
+            <div class="control">
+              <input class="input" type="text" placeholder="Name ..." />
+            </div>
+          </div>
+          <div class="field is-grouped">
+            <div class="field has-addons control">
+              <p class="control">
+                <span class="select">
+                  <select>
+                    <option>$</option>
+                    <option>£</option>
+                    <option>€</option>
+                  </select>
+                </span>
+              </p>
+              <p class="control">
+                <input class="input" type="number" placeholder="Bet ..." />
+              </p>
+            </div>
+            <p class="control">
+              <span class="select">
+                <select>
+                  <option>On ...</option>
+                  <option>Draw</option>
+                  <option>Home</option>
+                  <option>Away</option>
+                </select>
+              </span>
+            </p>
+            <div class="field control">
+              <div class="field has-addons control">
+                <p class="control">
+                  <span class="select">
+                    <select
+                      onchange="if (event.target.value === 'Teams'){showTeamModal(); showTeam(1)} else hideTeam(1)"
+                    >
+                      <option>On ...</option>
+                      <option>Teams</option>
+                      <option>Any</option>
+                    </select>
+                  </span>
+                </p>
+                <p class="control" id="team1" style="display: none;">
+                  <a class="button is-info">
+                    x T
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <div class="field control">
+              <span class="select">
+                <select>
+                  <option>Playing ...</option>
+                  <option>Home</option>
+                  <option>Away</option>
+                  <option>Any</option>
+                </select>
+              </span>
+            </div>
+            <div class="field control">
+              <div class="field has-addons control">
+                <p class="control">
+                  <span class="select">
+                    <select
+                      onchange="if (event.target.value === 'Teams'){showTeamModal(); showTeam(2)} else hideTeam(2)"
+                    >
+                      <option>Against ...</option>
+                      <option>Teams</option>
+                      <option>Any</option>
+                    </select>
+                  </span>
+                </p>
+                <p class="control" id="team2" style="display: none;">
+                  <a class="button is-info">
+                    x T
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="box">
+            <h2 class="title is-5">Conditions</h2>
+            <div class="container is-fluid">
+              <div class="field is-grouped">
+                <p class="control">
+                  <span class="select">
+                    <select
+                      onchange="if (event.target.value === 'The Team'){hideOddCondition(); showTeamCondition()} else if (event.target.value === 'The Odd'){showOddCondition(); hideTeamCondition()} else {hideOddCondition(); hideTeamCondition()}"
+                    >
+                      <option>On ...</option>
+                      <option>The Team</option>
+                      <option>The Odd</option>
+                    </select>
+                  </span>
+                </p>
+                <div
+                  class="field is-grouped control"
+                  id="isOdd"
+                  style="display: none;"
+                >
+                  Between &nbsp;
+                  <p class="control">
+                    <input
+                      class="input"
+                      type="number"
+                      placeholder="Odd min..."
+                    />
+                  </p>
+                  & &nbsp;
+                  <p class="control">
+                    <input
+                      class="input"
+                      type="number"
+                      placeholder="Odd max..."
+                    />
+                  </p>
+                </div>
+                <div
+                  class="field is-grouped control"
+                  id="isTeam"
+                  style="display: none;"
+                >
+                  Have &nbsp;
+                  <p class="control">
+                    <span class="select">
+                      <select>
+                        <option>Win</option>
+                        <option>Lost</option>
+                        <option>Draw</option>
+                      </select>
+                    </span>
+                  </p>
+                  The last &nbsp;
+                  <p class="control">
+                    <input class="input" type="number" />
+                  </p>
+                  Games
+                </div>
+              </div>
+              <a class="button is-success is-small"
+                ><i class="fas fa-plus-circle"></i
+              ></a>
+            </div>
+          </div>
+          <div class="has-text-centered">
+            <button class="button is-success" type="submit">Save</button>
+            <a class="button is-danger" onclick="hideNewMethod()">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </section>
+    <div class="modal" id="teamModal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <h1 class="title">Choose Teams</h1>
+          <label class="checkbox">
+            <input type="checkbox" />
+            Team 1
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" />
+            Team 2
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" />
+            Team 3
+          </label>
+          <a class="button" onclick="hideTeamModal()">Save</a>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function showNewMethod() {
+      document.getElementById("newMethod").style.display = "block";
+    }
+    function hideNewMethod() {
+      document.getElementById("newMethod").style.display = "none";
+    }
+    function showTeamModal() {
+      document.getElementById("teamModal").className = "modal is-active";
+    }
+    function hideTeamModal() {
+      document.getElementById("teamModal").className = "modal";
+    }
+    function showTeam(no) {
+      switch (no) {
+        case 1:
+          document.getElementById("team1").style.display = "block";
+          break;
+
+        case 2:
+          document.getElementById("team2").style.display = "block";
+          break;
+
+        default:
+          break;
+      }
+    }
+    function hideTeam(no) {
+      switch (no) {
+        case 1:
+          document.getElementById("team1").style.display = "none";
+          break;
+
+        case 2:
+          document.getElementById("team2").style.display = "none";
+          break;
+
+        default:
+          break;
+      }
+    }
+    function showTeamCondition() {
+      document.getElementById("isTeam").style.display = "block";
+    }
+    function hideTeamCondition() {
+      document.getElementById("isTeam").style.display = "none";
+    }
+    function showOddCondition() {
+      document.getElementById("isOdd").style.display = "block";
+    }
+    function hideOddCondition() {
+      document.getElementById("isOdd").style.display = "none";
+    }
+  </script>
+</html>
