@@ -11,4 +11,12 @@
 
 ## Render
 
-premier block - title - table - [map] _listOfMethods_ - _method.name_ - _method.creation_ - _method.resume_
+- premier block
+  - title
+  - table
+    - **listOfMethods** [map] :
+      - **method.name**
+      - **method.creation**
+      - **method.resume**
+      - button [onClick] : **methodManagement** = {active: **True**, methodId: **method.id**}
+      - button [onClick] : [deleteMethod](**method.id**)
