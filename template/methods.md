@@ -11,25 +11,4 @@
 
 ## Render
 
-<section>
-    <container>
-        <h1></h1>
-        <table>
-            <tbody>
-                {*listOfMethods*.map((method) => (
-                    <tr>
-                        <th>*method.name*</th>
-                        <td>*method.creation*</td>
-                        <td>*method.resume*</td>
-                        <td>
-                            <button>Modify</button> => **onClick** = *methodManagement* => {active: *True*, methodId: *method.id*}
-                        </td>
-                        <td>
-                            <button>Delete</button> => **onClick** = *DeleteMethod*(*method.id*)
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    </container>
-</section>
+premier block - title - table - [map] _listOfMethods_ - _method.name_ - _method.creation_ - _method.resume_
