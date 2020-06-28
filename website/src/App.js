@@ -1,7 +1,9 @@
 import React from "react";
 
+import MyMethods from "./pages/MyMethods/MyMethods";
+
 function App() {
-  return <h1>Hello World</h1>;
+  return <MyMethods />;
 }
 
 export default App;
