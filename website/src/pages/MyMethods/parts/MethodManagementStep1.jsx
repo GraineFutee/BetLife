@@ -3,20 +3,20 @@ import React, { useState } from "react";
 import MethodManagementStep2 from './MethodManagementStep2'
 import Modal from './Modal'
 
+
 // -------------------------------------------------------------------------------------
 // First part of the form - Choice of championship - Dealing with the method state 
 // -------------------------------------------------------------------------------------
-export default function MethodManagementStep1(props) {
+export default function MethodManagementStep1({method, setMethod, methods, setMethods}) {
 
-  // Will contain all method detail when saved
-  const [method, setMethod] = useState({betHowMany : 1, currency : '€'}); 
+  // Championship is the first option to define, can't go further without
+  const [championshipIsDefine, setChampionshipIsDefine] = useState(method.championship ? true : false)
+
+
   console.log(method)
 
   // Deal with the choice of one or more specific team(s)
-  const [modal, setModal] = useState({ active: false, for: "", value: [] });  // ?
-
-  // Championship is the first option to define, can't go further without
-  const [championshipIsDefine, setChampionshipIsDefine] = useState(false)
+  const [modal, setModal] = useState({ active: false, for: "", value: [] }); 
 
   // Teams needs to be set regarding the choosen championship
   // Means we need a list of all teams for each championship in the database
@@ -27,6 +27,7 @@ export default function MethodManagementStep1(props) {
 
 
 // -------------------------------------------------------------------------------------
+
   const handleChangeChampionship = (event) => {
     let newMethod = { ...method }
     newMethod.championship = event.currentTarget.value
@@ -60,7 +61,7 @@ export default function MethodManagementStep1(props) {
         <div className="container">
 
           <h2 className="title is-4">
-            {props.method.name ? props.method.name : "New Method"}
+            {method.name ? method.name : "New Method"}
           </h2>
 
           <form>
@@ -96,6 +97,9 @@ export default function MethodManagementStep1(props) {
                 setMethod={setMethod}
                 setModal={setModal}
                 teams={teams}
+                methods={methods}
+                setMethods={setMethods}
+                setChampionshipIsDefine={setChampionshipIsDefine}
               /> : 
               null
             }

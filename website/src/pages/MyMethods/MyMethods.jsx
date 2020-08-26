@@ -3,36 +3,19 @@ import React, { useState } from "react";
 import MethodManagementStep1 from "./parts/MethodManagementStep1";
 import MethodSummary from "./MethodSummary";
 
-/*
-TODO :
-  Fixes somes issues :
-    Conflict between the "betOnWho" variable coming from the select form and the "betOnWho" variable coming from the modal
+import {methodsFromDb} from '../../fakeDb'
 
-  Dealing with Save button :
-    Check every variable in order to always send the same format of "method" variable
-    
-*/
+
+
 // -------------------------------------------------------------------------------------
 // Main page - My Methods 
 // -------------------------------------------------------------------------------------
 export default function MyMethods() {
 
-  const [methods, setMethods] = useState([
-    // Initialize with User own methods
-    {
-      id: 1,
-      name: "test_name",
-      creation: "test_creation",
-      resume: "test_resume",
-    },
-    {
-      id: 2,
-      name: "Idee du siecle",
-      creation: "20/06/20",
-      resume: "Bet 1000€ On OM",
-    }
-  ]);
-  const [methodForManagement, setMethodForManagement] = useState(null);
+  const [methods, setMethods] = useState(methodsFromDb);
+
+  // Should be either a new method to create, or an existing one to modify
+  const [method, setMethod] = useState(null);
 
 
 // -------------------------------------------------------------------------------------
@@ -46,21 +29,21 @@ export default function MyMethods() {
           <table className="table">
             <tbody>
 
-              {methods.map((method) => (
+              {methods.map((method) => 
                 <MethodSummary 
                   key={method.id}
                   method={method}
                   methods={methods}
-                  setMethodForManagement={setMethodForManagement}
+                  setMethod={setMethod}
                   setMethods={setMethods}
                 />
-              ))}
+              )}
 
               <tr>
                 <td>
                   <button
                     className="button is-light is-small"
-                    onClick={() => setMethodForManagement({})}
+                    onClick={() => setMethod({})}
                   >
                     <i className="fas fa-plus-circle"></i>
                   </button>
@@ -73,7 +56,14 @@ export default function MyMethods() {
         </div>
       </section>
 
-      {methodForManagement && <MethodManagementStep1 method={methodForManagement} />}
+      {method && 
+        <MethodManagementStep1 
+          method={method} 
+          setMethod={setMethod}
+          methods={methods}
+          setMethods={setMethods}
+        />
+      }
 
     </>
   );

@@ -27,20 +27,15 @@ export default function ({ modal, setModal, teams, method, setMethod }) {
   const handleClickCancel = (event) => {
     switch (modal.for) {
       case "betOnSpecific":
-        if (method.betOnWho.length === 0) {
           let newMethod = { ...method };
           newMethod.betOnWho = null;
           setMethod(newMethod);
-        }
         break;
       case "againstSpecific":
-        if (method.againstWho.length === 0) {
-          let newMethod = { ...method };
-          newMethod.againstWho = null;
-          setMethod(newMethod);
-        }
+          let newMethod2 = { ...method };
+          newMethod2.againstWho = null;
+          setMethod(newMethod2);
         break;
-
       default:
         break;
     }
@@ -67,7 +62,6 @@ export default function ({ modal, setModal, teams, method, setMethod }) {
                 setModal={setModal}
               /> )}
           </div>
-          )
 
 
           <div className="buttons">

@@ -4,26 +4,27 @@ import React from "react";
 // -------------------------------------------------------------------------------------
 // Line of Each Method Summary
 // -------------------------------------------------------------------------------------
-export default function MethodSummary({method, methods, setMethods, setMethodForManagement}) {
+export default function MethodSummary({method, setMethod, methods, setMethods}) {
 
     const handleClickModify = (event) => {
-        setMethodForManagement(
+        setMethod(
             methods.find(
-              (method) => method.id === event.currentTarget.id
+              (method) => method.id === Number(event.currentTarget.id)
             )
           )
     }
 
     const handleClickDelete = (event) => {
         let newMethods = [...methods];
-        newMethods.splice(
-          newMethods.findIndex(
-            (method) => method.id === event.currentTarget.id
-          ),
-          1
-        );
-        setMethods(newMethods);
-      }
+  
+        console.log(newMethods)
+        //method.id === Number(event.currentTarget.id) ? null : method
+
+        setMethods(newMethods.filter(
+          (method) => method.id !== Number(event.currentTarget.id)
+        ))
+    }
+
 
 // -------------------------------------------------------------------------------------
     return (
@@ -38,7 +39,7 @@ export default function MethodSummary({method, methods, setMethods, setMethodFor
                 <td>
                     <button
                       className="button is-info is-small is-rounded"
-                      id={method.id} // Why ??
+                      id={method.id}
                       onClick={handleClickModify}
                     >
                       Modify
@@ -48,7 +49,7 @@ export default function MethodSummary({method, methods, setMethods, setMethodFor
                 <td>
                     <button
                       className="button is-danger is-small is-rounded"
-                      id={method.id} // Why ??
+                      id={method.id}
                       onClick={handleClickDelete}
                     >
                       Delete

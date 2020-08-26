@@ -5,7 +5,7 @@ import SaveCancelButtons from "./SaveCancelButtons";
 // -------------------------------------------------------------------------------------
 // Second part of the form - Basic choices for betting method
 // -------------------------------------------------------------------------------------
-export default function MethodManagementStep2({ method, setMethod, setModal }) {
+export default function MethodManagementStep2({ method, setMethod, setModal, methods, setMethods, setChampionshipIsDefine }) {
 
     // Because need to disable some option when draw is picked
     const [drawIsSelected, setDrawIsSelected] = useState(false)
@@ -40,7 +40,7 @@ export default function MethodManagementStep2({ method, setMethod, setModal }) {
             setModal({
                 active: true,
                 for: "betOnSpecific",
-                value: [method.betOnWho],
+                value: [],
             })
           }
 
@@ -69,11 +69,30 @@ export default function MethodManagementStep2({ method, setMethod, setModal }) {
             setModal({
                 active: true,
                 for: "againstSpecific",
-                value: [method.againstWho],
+                value: [],
             })
           }
         setMethod(newMethod);
     }
+
+    const handleClickBetOnWhoYourTeams = (event) => {
+        event.preventDefault()
+        setModal({
+            active: true,
+            for: "betOnSpecific",
+            value: method.betOnWho,
+        })
+    }
+
+    const handleClickAgainstWhoYourTeams = (event) => {
+        event.preventDefault()
+        setModal({
+            active: true,
+            for: "againstSpecific",
+            value: method.againstWho,
+        })
+    }
+
 
 // -------------------------------------------------------------------------------------
     return (
@@ -110,17 +129,26 @@ export default function MethodManagementStep2({ method, setMethod, setModal }) {
                 <div className="control is-flex">
                     <label className="label is-small mt-2 mr-1" > On.. </label>
 
-                    <span className="select is-small">
-                        <select
-                            value={method.betOnWho ? method.betOnWho : "Bet On Who?"}
-                            onChange={handleChangeBetOnWho}
+                    {(typeof method.betOnWho !== 'object' || method.betOnWho === null) ? 
+                        <span className="select is-small">
+                            <select
+                                value={method.betOnWho ? method.betOnWho : "Bet On Who?"}
+                                onChange={handleChangeBetOnWho}
+                            >
+                                <option>Bet On Who?</option>
+                                <option>All Teams</option>
+                                <option>Specific(s) Team(s)</option>
+                                <option>Draw</option>
+                            </select>
+                        </span>
+                        :
+                        <button 
+                            className="button is-small is-info"
+                            onClick={handleClickBetOnWhoYourTeams}
                         >
-                            <option>Bet On Who?</option>
-                            <option>All Teams</option>
-                            <option>Specific(s) Team(s)</option>
-                            <option>Draw</option>
-                        </select>
-                    </span>
+                            Your Team(s)        
+                        </button>
+                        }
                 </div>
 
                 {!drawIsSelected &&
@@ -145,16 +173,25 @@ export default function MethodManagementStep2({ method, setMethod, setModal }) {
                 <div className="control is-flex">
                     <label className="label is-small mt-2 mr-1" > Against.. </label>
 
-                    <span className="select is-small">
-                        <select
-                            value={method.againstWho ? method.againstWho : "Against Who?"}
-                            onChange={handleChangeAgainstWho}
+                    {(typeof method.againstWho !== 'object' || method.againstWho === null) ? 
+                        <span className="select is-small">
+                            <select
+                                value={method.againstWho ? method.againstWho : "Against Who?"}
+                                onChange={handleChangeAgainstWho}
+                            >
+                                <option>Against Who?</option>
+                                <option>Any Teams</option>
+                                <option>Specific(s) Team(s)</option>
+                            </select>
+                        </span>
+                        :
+                        <button 
+                            className="button is-small is-link"
+                            onClick={handleClickAgainstWhoYourTeams}
                         >
-                            <option>Against Who?</option>
-                            <option>Any Teams</option>
-                            <option>Specific(s) Team(s)</option>
-                        </select>
-                    </span>
+                            Your Team(s)        
+                        </button>
+                        }
                 </div>
                 }           
             </div>
@@ -165,7 +202,14 @@ export default function MethodManagementStep2({ method, setMethod, setModal }) {
                 setMethod={setMethod}
             />
 
-            <SaveCancelButtons />
+            <SaveCancelButtons 
+                method={method}
+                setMethod={setMethod}
+                setModal={setModal}
+                methods={methods}
+                setMethods={setMethods}
+                setChampionshipIsDefine={setChampionshipIsDefine}
+            />
         </>
     );
 }

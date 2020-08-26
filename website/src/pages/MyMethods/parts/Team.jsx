@@ -18,6 +18,7 @@ export default function ({ modal, setModal, team}) {
         }
         setModal(newModal);        
     }
+
 // -------------------------------------------------------------------------------------
     return (
 
