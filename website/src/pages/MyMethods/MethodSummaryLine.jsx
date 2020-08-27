@@ -4,7 +4,7 @@ import React from "react";
 // -------------------------------------------------------------------------------------
 // Line of Each Method Summary
 // -------------------------------------------------------------------------------------
-export default function MethodSummary({method, setMethod, methods, setMethods}) {
+export default function MethodSummaryLine({method, setMethod, methods, setMethods}) {
 
     const handleClickModify = (event) => {
         setMethod(

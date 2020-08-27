@@ -4,32 +4,12 @@ import React from "react";
 // -------------------------------------------------------------------------------------
 // Submitting form - Save and Cancel buttons
 // -------------------------------------------------------------------------------------
-export default function ({ method, setMethod, setModal, methods, setMethods, setChampionshipIsDefine }) {
+export default function ({ method, setMethod, setModal, methods, setMethods, setChampionshipIsDefine, setDisplaySimulation }) {
 
 
     const formatUserMethod = (method) => {
         /*
-        Possibly check here in order to be sure to have a method in a classic format, like that:
-            method = {
-                id:,
-                championship:,
-                name:,
-                creation:,
-                summary:,
-                betHowMany:,
-                currency:,
-                betOnWho:,
-                playingWhere:,
-                againstWho:,
-                conditions:[
-                    {
-                        onWhat:,
-                        onWho:,
-                        value1:,
-                        value2:
-                    }
-                ]
-            }
+        Possibly check here in order to be sure to have a method in a classic format, see fakeDb
         */
         const goodMethod = {...method}
 
@@ -44,6 +24,7 @@ export default function ({ method, setMethod, setModal, methods, setMethods, set
         }
 
         goodMethod.id = Math.floor(Math.random() * 10000);
+        
         const d = new Date()
         goodMethod.creation = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`
 
@@ -67,11 +48,16 @@ export default function ({ method, setMethod, setModal, methods, setMethods, set
 
     const handleClickCancel = (event) => {
         event.preventDefault()
-        const newMethod = null
 
-        setMethod(newMethod)
+        setMethod(null)
         setModal({ active: false, for: "", value: [] });
         setChampionshipIsDefine(false)
+    }
+
+    const handleClickSimulate = (event) => {
+        event.preventDefault()
+
+        setDisplaySimulation(true)
     }
 
     // -------------------------------------------------------------------------------------
@@ -83,14 +69,21 @@ export default function ({ method, setMethod, setModal, methods, setMethods, set
                 onClick={handleClickSave}
             >
                 Save
-                </button>
+            </button>
+
+            <button
+                className="button is-info"
+                onClick={handleClickSimulate}
+            >
+                Simulate
+            </button>
 
             <button
                 className="button is-danger"
                 onClick={handleClickCancel}
             >
                 Cancel
-                </button>
+            </button>
         </div>
     );
 }

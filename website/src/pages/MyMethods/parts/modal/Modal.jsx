@@ -1,5 +1,5 @@
 import React from 'react'
-import Team from './Team'
+import TeamCheckbox from './TeamCheckbox';
 
 
 // -------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ export default function ({ modal, setModal, teams, method, setMethod }) {
 
           <div className="columns is-multiline box is-mobile">
             {teams.map((team) => 
-              <Team 
+              <TeamCheckbox 
                 key={team}
                 team={team}
                 modal={modal}

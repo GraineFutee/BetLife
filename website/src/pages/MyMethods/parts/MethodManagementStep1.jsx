@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import MethodManagementStep2 from './MethodManagementStep2'
-import Modal from './Modal'
+import Modal from './modal/Modal'
 
 
 // -------------------------------------------------------------------------------------

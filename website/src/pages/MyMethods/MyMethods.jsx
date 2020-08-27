@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import MethodManagementStep1 from "./parts/MethodManagementStep1";
-import MethodSummary from "./MethodSummary";
+import MethodSummaryLine from "./MethodSummaryLine";
 
 import {methodsFromDb} from '../../fakeDb'
 
@@ -30,7 +30,7 @@ export default function MyMethods() {
             <tbody>
 
               {methods.map((method) => 
-                <MethodSummary 
+                <MethodSummaryLine 
                   key={method.id}
                   method={method}
                   methods={methods}

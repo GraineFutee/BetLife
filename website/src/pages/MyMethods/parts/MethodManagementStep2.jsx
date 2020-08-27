@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import MethodManagementStep3 from "./MethodManagementStep3";
-import SaveCancelButtons from "./SaveCancelButtons";
+import Buttons from "./Buttons";
+import Simulation from './Simulation'
 
 // -------------------------------------------------------------------------------------
 // Second part of the form - Basic choices for betting method
@@ -8,7 +9,9 @@ import SaveCancelButtons from "./SaveCancelButtons";
 export default function MethodManagementStep2({ method, setMethod, setModal, methods, setMethods, setChampionshipIsDefine }) {
 
     // Because need to disable some option when draw is picked
-    const [drawIsSelected, setDrawIsSelected] = useState(false)
+    const [ drawIsSelected, setDrawIsSelected ] = useState(false)
+
+    const [ displaySimulation, setDisplaySimulation ] = useState(false)
 
 
 // -------------------------------------------------------------------------------------
@@ -202,14 +205,22 @@ export default function MethodManagementStep2({ method, setMethod, setModal, met
                 setMethod={setMethod}
             />
 
-            <SaveCancelButtons 
+            <Buttons 
                 method={method}
                 setMethod={setMethod}
                 setModal={setModal}
                 methods={methods}
                 setMethods={setMethods}
                 setChampionshipIsDefine={setChampionshipIsDefine}
+                setDisplaySimulation={setDisplaySimulation}
             />
+
+            {displaySimulation &&
+            <Simulation 
+                method={method}
+                setDisplaySimulation={setDisplaySimulation}
+            />
+            }
         </>
     );
 }
