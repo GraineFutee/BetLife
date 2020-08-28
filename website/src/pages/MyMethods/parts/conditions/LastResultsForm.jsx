@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../../../../reducers/methodReducer";
 
+
 // -------------------------------------------------------------------------------------
 // Condition - If Last Results is chosen
 // -------------------------------------------------------------------------------------

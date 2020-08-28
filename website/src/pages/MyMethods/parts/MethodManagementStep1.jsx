@@ -1,9 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
-
 import MethodManagementStep2 from './MethodManagementStep2'
-import Modal from './modal/Modal'
 
 import { setChampionship, setName } from "../../../reducers/methodReducer";
 import { setChampionshipIsDefine } from "../../../reducers/managementReducer";
@@ -100,8 +98,6 @@ export default function MethodManagementStep1() {
           </form>
         </div>
       </section>
-
-      <Modal  />
 
     </>
   );

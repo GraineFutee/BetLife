@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
 
 import MethodManagementStep1 from "./parts/MethodManagementStep1";
 import MethodSummaryLine from "./MethodSummaryLine";
@@ -7,8 +8,7 @@ import Simulation from './parts/Simulation'
 
 import { initializeMethods } from "../../reducers/methodsReducer";
 import { initializeMethod, backToNull } from "../../reducers/methodReducer";
-import { initializeExceptTeams } from "../../reducers/managementReducer";
-
+import { initializeExceptTeams, initializeTeams } from "../../reducers/managementReducer";
 
 
 
@@ -23,6 +23,21 @@ export default function MyMethods() {
 
   const displaySimulation = useSelector(state => state.management.displaySimulation)
 
+  // Get all teams reagrding the championship (right now, only one championship)
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const result = await axios(
+          `https://betlifeback.herokuapp.com/api/teams/championship/${1}`
+        );
+        dispatch(initializeTeams(result.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTeams();
+  }, [dispatch]);
+
   // "Initialize" pick up methods into fakeDb, Should come from Each user own methods
   useEffect(() => {
     dispatch(initializeMethods())
@@ -35,7 +50,7 @@ export default function MyMethods() {
     dispatch(initializeExceptTeams())
   }
 
-// -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
   return (
     <>
       <section className="section">
@@ -47,7 +62,7 @@ export default function MyMethods() {
           <table className="table">
             <tbody>
 
-            {methods.map((existingMethod) => <MethodSummaryLine method={existingMethod} key={existingMethod.id} /> )}
+              {methods.map((existingMethod) => <MethodSummaryLine method={existingMethod} key={existingMethod.id} />)}
 
               <tr>
                 <td>
@@ -73,4 +88,3 @@ export default function MyMethods() {
     </>
   );
 }
- 

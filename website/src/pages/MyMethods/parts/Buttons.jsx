@@ -6,6 +6,8 @@ import { saveMethod } from "../../../reducers/methodsReducer";
 import { initializeExceptTeams, openSimulation } from "../../../reducers/managementReducer";
 
 
+// Todo => Saving an already existing method should update and not build a new one
+
 // -------------------------------------------------------------------------------------
 // Submitting form - Save and Cancel buttons
 // -------------------------------------------------------------------------------------
@@ -24,6 +26,7 @@ export default function () {
         if (typeof cleanedMethod.againstWho === 'undefined') { cleanedMethod.againstWho = "Any Teams" }
 
         // Should check here if odd value are ok (value1 < value2)
+        
         return cleanedMethod
     }
 

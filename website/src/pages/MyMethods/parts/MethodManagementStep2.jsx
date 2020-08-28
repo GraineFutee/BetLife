@@ -1,12 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
 import MethodManagementStep3 from "./MethodManagementStep3";
 import Buttons from "./Buttons";
 import Simulation from './Simulation'
+import PickBetTeams from './PickBetTeams'
+import PickAgainstTeams from './PickAgainstTeams'
 
 import { setBetHowMany, setCurrency, setBetOnWho, setPlayingWhere, setAgainstWho } from "../../../reducers/methodReducer";
-import { setDrawIsSelected, setModalFor, setModalValue, setDrawIsNotSelected } from "../../../reducers/managementReducer";
+import { setDrawIsSelected, setDrawIsNotSelected } from "../../../reducers/managementReducer";
 
 
 
@@ -20,6 +22,10 @@ export default function MethodManagementStep2() {
     const drawIsSelected = useSelector(state => state.management.drawIsSelected)
     const displaySimulation = useSelector(state => state.management.displaySimulation)
 
+    // Push this into reducers
+    const [ displayPickBetTeams, setDisplayPickBetTeams ] = useState(false)
+    const [ displayPickAgainstTeams, setDisplayPickAgainstTeams ] = useState(false)
+
     const method = useSelector(state => state.method)
 
 
@@ -27,9 +33,10 @@ export default function MethodManagementStep2() {
 
     const handleChangeBetOnWho = (event) => {
         if (event.currentTarget.value === "Specific(s) Team(s)") {
-            dispatch(setModalFor("betOnSpecific"))
+            setDisplayPickBetTeams(true)
         } else {
             dispatch(setBetOnWho(event.currentTarget.value))
+            setDisplayPickBetTeams(false)
         }
 
         if (event.currentTarget.value === "Draw") {
@@ -39,24 +46,24 @@ export default function MethodManagementStep2() {
         }
     }
 
+
     const handleChangeAgainstWho = (event) => {
         if (event.currentTarget.value === "Specific(s) Team(s)") {
-            dispatch(setModalFor("againstSpecific"))
+            setDisplayPickAgainstTeams(true)
         } else {
             dispatch(setAgainstWho(event.currentTarget.value))
+            setDisplayPickAgainstTeams(false)
         }
     }
 
     const handleClickBetOnWhoYourTeams = (event) => {
         event.preventDefault()
-        dispatch(setModalFor("betOnSpecific"))
-        dispatch(setModalValue(method.betOnWho))
+        setDisplayPickBetTeams(true)
     }
 
     const handleClickAgainstWhoYourTeams = (event) => {
         event.preventDefault()
-        dispatch(setModalFor("againstSpecific"))
-        dispatch(setModalValue(method.againstWho))
+        setDisplayPickAgainstTeams(true)
     }
 
 
@@ -165,6 +172,9 @@ export default function MethodManagementStep2() {
             <MethodManagementStep3 />
 
             <Buttons />
+
+            {displayPickBetTeams && <PickBetTeams setDisplayPickBetTeams={setDisplayPickBetTeams} />}
+            {displayPickAgainstTeams && <PickAgainstTeams setDisplayPickAgainstTeams={setDisplayPickAgainstTeams} />}
 
             {displaySimulation && <Simulation />}
 

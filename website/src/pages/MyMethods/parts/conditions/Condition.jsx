@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import OddsForm from './OddsForm'
 import LastResultsForm from './LastResultsForm'
+
 import { setConditionOnWhat, deleteCondition } from "../../../../reducers/methodReducer";
+
 
 // -------------------------------------------------------------------------------------
 // Condition Line

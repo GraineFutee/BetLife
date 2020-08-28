@@ -2,7 +2,6 @@
 
 const initialState = {
     championshipIsDefine: false,
-    modal: { active: false, for: "", value: [] },
     teams: [],
     drawIsSelected: false,
     displaySimulation: false,
@@ -18,14 +17,11 @@ export const initializeTeams = (teams) => {
     return { type: 'INIT_TEAMS', data: teams }
 }
 
-export const initializeModal = () => {
-    return { type: 'INIT_MODAL' }
-}
-
 export const setChampionshipIsDefine = () => {
     return { type: 'CHAMPIONSHIP_DEFINED' }
 }
 
+// Can use one for this
 export const setDrawIsSelected = () => {
     return { type: 'DRAW_SELECTED' }
 }
@@ -33,22 +29,7 @@ export const setDrawIsNotSelected = () => {
     return { type: 'DRAW_NOT_SELECTED' }
 }
 
-export const setModalFor = (forWhat) => {
-    return { type: 'SET_MODAL_FOR', data: { forWhat: forWhat} }
-}
-
-export const setModalValue = (value) => {
-    return { type: 'SET_MODAL_VALUE', data: { value: value} }
-}
-
-export const addTeamToModal = (teamName) => {
-    return { type: 'ADD_TEAM', data: teamName }
-}
-
-export const removeTeamToModal = (teamName) => {
-    return { type: 'REMOVE_TEAM', data: teamName }
-}
-
+// Can use one for this too
 export const openSimulation = (method) => {
     return { type: 'OPEN_SIMULATION', data: method }
 }
@@ -79,10 +60,6 @@ const managementReducer = (state = initialState, action) => {
             newState.teams = action.data
             return newState
 
-        case 'INIT_MODAL' :
-            newState.modal = { active: false, for: "", value: [] }
-            return newState
-
         case 'CHAMPIONSHIP_DEFINED' :
             newState.championshipIsDefine = true
             return newState 
@@ -94,23 +71,6 @@ const managementReducer = (state = initialState, action) => {
         case 'DRAW_NOT_SELECTED' :
             newState.drawIsSelected = false
             return newState 
-
-        case 'SET_MODAL_FOR' :
-            newState.modal = { active: true, for: action.data.forWhat, value: [] }
-            return newState
-
-        case 'SET_MODAL_VALUE' :
-            newState.modal = { active: true, for: newState.modal.for, value: action.data.value }
-            return newState
-
-        case 'ADD_TEAM' :
-            newState.modal.value.push(action.data)
-            console.log(state.modal.value)
-            return newState
-    
-        case 'REMOVE_TEAM' :
-            newState.modal.value.splice( newState.modal.value.indexOf(action.data), 1 )
-            return newState
 
         case 'CLOSE_SIMULATION' :
             newState.displaySimulation = false

@@ -38,7 +38,7 @@ export default function () {
                 When the following conditions are met :
                 </p>
               {method.conditions.map(condition =>
-                <p className="ml-2"> - {condition.onWhat} of {condition.onWho} are : {condition.value1} / {condition.value1}</p>
+                <p key={condition.id} className="ml-2"> - {condition.onWhat} of {condition.onWho} are : {condition.value1} / {condition.value1}</p>
               )}
             </div>
           }
