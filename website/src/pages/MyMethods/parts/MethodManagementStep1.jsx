@@ -1,34 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from 'react-redux'
+
 
 import MethodManagementStep2 from './MethodManagementStep2'
 import Modal from './modal/Modal'
+
+import { setChampionship, setName } from "../../../reducers/methodReducer";
+import { setChampionshipIsDefine } from "../../../reducers/managementReducer";
 
 
 // -------------------------------------------------------------------------------------
 // First part of the form - Choice of championship - Dealing with the method state 
 // -------------------------------------------------------------------------------------
-export default function MethodManagementStep1({method, setMethod, methods, setMethods}) {
+export default function MethodManagementStep1() {
 
+  const dispatch = useDispatch()
   // Championship is the first option to define, can't go further without
-  const [championshipIsDefine, setChampionshipIsDefine] = useState(method.championship ? true : false)
+  const championshipIsDefine = useSelector(state => state.management.championshipIsDefine)
 
-
+  const method = useSelector(state => state.method)
   console.log(method)
-
-  // Deal with the choice of one or more specific team(s)
-  const [modal, setModal] = useState({ active: false, for: "", value: [] }); 
-
-  // Teams needs to be set regarding the choosen championship
-  // Means we need a list of all teams for each championship in the database
-  // The best is probably to limit the list with only the 20 teams playing the current season
-  // const [teams, setTeams] = useState([]); 
-  const teams = ["Team1", "Team2", "Team3" ]
-
-
 
 // -------------------------------------------------------------------------------------
 
   const handleChangeChampionship = (event) => {
+    dispatch(setChampionship(event.currentTarget.value))
+    dispatch(setChampionshipIsDefine())
+  }
+
+  /*
+  const handleChangeName = (event) => {
+    dispatch(setName(event.currentTarget.value))
+  }
+  
     let newMethod = { ...method }
     newMethod.championship = event.currentTarget.value
 
@@ -50,7 +54,7 @@ export default function MethodManagementStep1({method, setMethod, methods, setMe
       newMethod.name = null
     }
     setMethod(newMethod);
-  }
+  }*/
 
 
 // -------------------------------------------------------------------------------------
@@ -86,35 +90,19 @@ export default function MethodManagementStep1({method, setMethod, methods, setMe
                   className="input is-small"
                   placeholder="Name.."
                   value={method.name ? method.name : ""}
-                  onChange={handleChangeName}
+                  onChange={(event) => dispatch(setName(event.currentTarget.value))}
                 />
               </div>
             </div>
 
-            {championshipIsDefine ? 
-              <MethodManagementStep2 
-                method={method}
-                setMethod={setMethod}
-                setModal={setModal}
-                teams={teams}
-                methods={methods}
-                setMethods={setMethods}
-                setChampionshipIsDefine={setChampionshipIsDefine}
-              /> : 
-              null
-            }
+            {championshipIsDefine ? <MethodManagementStep2 /> :  null  }
 
           </form>
         </div>
       </section>
 
-      <Modal 
-        teams={teams}
-        setMethod={setMethod}
-        method={method}
-        modal={modal}
-        setModal={setModal}
-      />
+      <Modal  />
+
     </>
   );
 }

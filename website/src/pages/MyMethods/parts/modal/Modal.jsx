@@ -1,46 +1,89 @@
-import React from 'react'
-import TeamCheckbox from './TeamCheckbox';
+import React, {useEffect} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+
+//import TeamCheckbox from './TeamCheckbox';
+
+import { initializeTeams } from "../../../../reducers/managementReducer";
+import { setBetOnWho, setAgainstWho } from '../../../../reducers/methodReducer';
+import { initializeModal } from '../../../../reducers/managementReducer';
+import { addTeamToModal, removeTeamToModal, setModalValue } from '../../../../reducers/managementReducer'
 
 
 // -------------------------------------------------------------------------------------
 // Modal box - Choose one or more team(s)
 // -------------------------------------------------------------------------------------
-export default function ({ modal, setModal, teams, method, setMethod }) {
+export default function () {
 
+  const dispatch = useDispatch()
+  const modal = useSelector(state => state.management.modal)
+  const teams = useSelector(state => state.management.teams)
+
+  const method = useSelector(state => state.method)
+  console.log(method)
+
+  // Get all teams reagrding the championship (right now, only one championship)
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const result = await axios(
+          `https://betlifeback.herokuapp.com/api/teams/championship/${1}`
+        );
+        dispatch(initializeTeams(result.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTeams();
+  }, [dispatch]);
+  
+
+  // -------------------------------------------------------------------------------------
   const handleClickSave = (event) => {
-      let newMethod = { ...method };
+
       switch (modal.for) {
         case "betOnSpecific":
-          newMethod.betOnWho = modal.value;
-          break;
+          dispatch(setBetOnWho(modal.value))
+          break
         case "againstSpecific":
-          newMethod.againstWho = modal.value;
-          break;
-
+          dispatch(setAgainstWho(modal.value))
+          break
         default:
-          break;
+          break
       }
-      setMethod(newMethod);
-      setModal({ active: false, for: "", value: [] });
+      dispatch(initializeModal())
   }
 
   const handleClickCancel = (event) => {
+    console.log("When cancel is clicked, before : ", modal)
     switch (modal.for) {
       case "betOnSpecific":
-          let newMethod = { ...method };
-          newMethod.betOnWho = null;
-          setMethod(newMethod);
-        break;
+        dispatch(setBetOnWho(null))
+        break
       case "againstSpecific":
-          let newMethod2 = { ...method };
-          newMethod2.againstWho = null;
-          setMethod(newMethod2);
-        break;
+        dispatch(setAgainstWho(null))
+        break
       default:
-        break;
+        break
     }
-    setModal({ active: false, for: "", value: [] });
+    console.log("When cancel is clicked, after : ", method.betOnWho)
+    dispatch(initializeModal())
   }
+
+  const handleCheckTeam = (event, teamName) => {
+    if (event.currentTarget.checked) {
+        dispatch(addTeamToModal(teamName))
+        //setIsChecked(true)
+    } else {
+        dispatch(removeTeamToModal(teamName))
+        //setIsChecked(false)
+    }
+    // Can't update modal whitout exiting the box 
+    dispatch(setModalValue(modal.value))
+    //console.log(modal.value)
+}
+console.log(modal.value)
+
 
 // -------------------------------------------------------------------------------------
   return (
@@ -54,13 +97,24 @@ export default function ({ modal, setModal, teams, method, setMethod }) {
           <h3 className="title is-4">Choose Your Teams</h3>
 
           <div className="columns is-multiline box is-mobile">
-            {teams.map((team) => 
-              <TeamCheckbox 
-                key={team}
-                team={team}
-                modal={modal}
-                setModal={setModal}
-              /> )}
+            {teams.map((team) =>  
+                <div key={team.name} className="column">
+                  <label
+                      className="checkbox"
+                      htmlFor={team.id}
+                      style={{ whiteSpace: "nowrap" }}
+                  >
+                  <input
+                      id={team.name}
+                      type="checkbox"
+                      checked={modal.value.includes(team.name)}
+                      onChange={(event) => handleCheckTeam(event, team.name)}
+                  />
+                  {" "}
+                  {team.name}
+                  </label>
+              </div>
+            )}
           </div>
 
 
@@ -69,7 +123,6 @@ export default function ({ modal, setModal, teams, method, setMethod }) {
             <button
               className="button is-success is-small"
               onClick={handleClickSave}
-              disabled={modal.value.length === 0}
             >
               Save
             </button>
@@ -87,3 +140,4 @@ export default function ({ modal, setModal, teams, method, setMethod }) {
     </div>
   )
 }
+// <TeamCheckbox key={team.id} team={team}/>

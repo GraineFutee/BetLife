@@ -1,39 +1,27 @@
 import React from "react";
+import { useDispatch, useSelector } from 'react-redux'
+
 import Condition from "./conditions/Condition";
+
+import { initConditions, addCondition } from "../../../reducers/methodReducer";
 
 
 // -------------------------------------------------------------------------------------
 // Third part of the form - Add conditions
 // -------------------------------------------------------------------------------------
-export default function MethodManagementStep2({ method, setMethod }) {
+export default function MethodManagementStep2() {
 
+    const dispatch = useDispatch()
+
+    const method = useSelector(state => state.method)
+
+    
     const handleClickAddCondition = (event) => {
         event.preventDefault()
 
-        let newMethod = { ...method };
+        if (!method.conditions) { dispatch(initConditions()) } 
+        else { dispatch(addCondition()) }
 
-        // method.condition should be limited (?):
-        //  - 0 conditions
-        //  - 1 condition (either "Odd" or "Results")
-        //  - 2 conditions ("Odd" and "Results")
-        // If we allow more, there is many possiblity of conflicts inside conditions
-        if (!newMethod.conditions) {
-            newMethod.conditions = [];
-        } 
-
-        newMethod.conditions.push({
-            id:
-                newMethod.conditions.length > 0
-                    ? newMethod.conditions[newMethod.conditions.length - 1]
-                        .id + 1
-                    : 0,
-            onWhat: "",
-            onWho: "",
-            value1: "",
-            value2: "",
-        });
-
-        setMethod(newMethod);
     }
 
 // -------------------------------------------------------------------------------------
@@ -42,22 +30,19 @@ export default function MethodManagementStep2({ method, setMethod }) {
         <div className="box">
             {method.conditions &&
                 method.conditions.map((condition) => 
-                    <Condition 
-                        key={condition.id} 
-                        index={condition.id}
-                        condition={condition}
-                        method={method}
-                        setMethod={setMethod}
-                    />
+                    <Condition key={condition.id} condition={condition} />
                 )
             }
 
+            {(!method.conditions || method.conditions.length < 2) &&
             <button 
                 className="button is-small is-light"
                 onClick={handleClickAddCondition}
             >
                 Add Condition
             </button>
+            }
+
         </div>
     );
 }

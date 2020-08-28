@@ -1,18 +1,22 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { closeSimulation } from '../../../reducers/managementReducer'
 
 
 // -------------------------------------------------------------------------------------
 // Simulation box - See the chosen method details
 // -------------------------------------------------------------------------------------
-export default function ({ method, setDisplaySimulation }) {
+export default function () {
+
+  const dispatch = useDispatch()
+  const method = useSelector(state => state.management.simulatedMethod)
 
   const handleClickClose = (event) => {
     event.preventDefault()
-
-    setDisplaySimulation(false)
+    dispatch(closeSimulation())
   }
 
-// -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
   return (
     <div className="modal is-active">
 
@@ -21,31 +25,33 @@ export default function ({ method, setDisplaySimulation }) {
       <div className="modal-content">
         <div className="box">
 
-          <h3 className="title is-4">Simulation</h3>
+          <h3 className="title is-4">Simulation - {method.name}</h3>
 
-            <p>
-                You want to bet {method.betHowMany}{method.currency} 
-                {method.betOnWho === "Draw" ? "on Draw" : ` each time ${method.betOnWho} plays ${method.playingWhere} against ${method.againstWho}`} 
-            </p>
-            { method.conditions.length > 0 &&
+          <p>
+            You want to bet <span className="has-text-success"> {method.betHowMany}{method.currency} </span>
+            {method.betOnWho === "Draw" ? " on Draws " : ` each time ${ method.betOnWho } plays ${ method.playingWhere } against ${ method.againstWho }`}
+          </p>
+
+          {method.conditions &&
             <div>
-                <p>
-                    When the following conditions are met :
+              <p>
+                When the following conditions are met :
                 </p>
-                    {method.conditions.map(condition =>
-                        <p className="ml-2"> - {condition.onWhat} of {condition.onWho} are : {condition.value1} / {condition.value1}</p>
-                    )}
+              {method.conditions.map(condition =>
+                <p className="ml-2"> - {condition.onWhat} of {condition.onWho} are : {condition.value1} / {condition.value1}</p>
+              )}
             </div>
-            }
-            <div className="has-text-danger my-5">
-                All work is here : A table with results for each year.
+          }
+
+          <div className="has-text-danger my-5">
+            All work is here : A table with results for each year.
             </div>
 
-            <button
-              className="button is-link is-small"
-              onClick={handleClickClose}
-            >
-              Close
+          <button
+            className="button is-link is-small"
+            onClick={handleClickClose}
+          >
+            Close
             </button>
 
         </div>

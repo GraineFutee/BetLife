@@ -1,46 +1,38 @@
 import React from "react";
+import { useDispatch, useSelector } from 'react-redux'
+
+import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../../../../reducers/methodReducer";
 
 // -------------------------------------------------------------------------------------
 // Condition - If Last Results is chosen
 // -------------------------------------------------------------------------------------
-export default function LastResultsForm({condition, method, setMethod}) {
+export default function LastResultsForm({condition}) {
 
-    const index = condition.id
+    const dispatch = useDispatch()
+
+    const method = useSelector(state => state.method)
+    // Can do better than that
+    const index = method.conditions.findIndex((c) => c.id === condition.id)
 
 // -------------------------------------------------------------------------------------
-    const handleChangeConditionOnWho = (event) => {
-        let newMethod = { ...method }
-        newMethod.conditions[index].onWho = event.currentTarget.value
-    
-          if (event.currentTarget.value === "...") {
-            newMethod.conditions[index].onWho = null
-          } 
-        setMethod(newMethod);
-    }
 
-    const handleChangeWhichResults = (event) => {
-        let newMethod = { ...method }
-        newMethod.conditions[index].value1 = event.currentTarget.value
-    
-          if (event.currentTarget.value === "On ..") {
-            newMethod.conditions[index].onWho = null
-          } 
-        setMethod(newMethod);
+    const handleChangeConditionOnWho = (event) => {
+
+        dispatch(setConditionOnWho(event.currentTarget.value, index))
+        // Re-init condition.values to avoid conflicts
+        dispatch(setConditionValue1("", index)) 
+        dispatch(setConditionValue2("", index)) 
+
     }
 
     const handleChangeHowManyResults = (event) => {
-        let newMethod = { ...method }
-        newMethod.conditions[index].value2 = event.currentTarget.value
-
-        // Need to check here if we receive a suitable number ? 
         if (event.currentTarget.value < 1) {
-            newMethod.conditions[index].value2 = 1
+            dispatch(setConditionValue2(1, index)) 
+        } else if (event.currentTarget.value > 5) {
+            dispatch(setConditionValue2(5, index))  
+        } else {
+            dispatch(setConditionValue2(event.currentTarget.value, index)) 
         }
-        if (event.currentTarget.value > 5) {
-            newMethod.conditions[index].value2 = 5
-        }
-
-        setMethod(newMethod);
     }
 
 // -------------------------------------------------------------------------------------
@@ -69,7 +61,7 @@ export default function LastResultsForm({condition, method, setMethod}) {
                 <span className="select is-small">
                     <select
                         value={condition.value1 ? condition.value1 : "..."}
-                        onChange={handleChangeWhichResults}                    
+                        onChange={(event) => { dispatch(setConditionValue1(event.currentTarget.value, index)) } }                    
                     >
                         <option>...</option>
                         <option>Won</option>
@@ -92,7 +84,7 @@ export default function LastResultsForm({condition, method, setMethod}) {
                     />
                 </span>
 
-                <label className="label is-small mt-2 ml-2" > Games </label>
+                <label className="label is-small mt-2 ml-2" > Matches </label>
 
             </div>            
         </>

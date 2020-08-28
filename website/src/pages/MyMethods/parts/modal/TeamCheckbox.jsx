@@ -1,22 +1,31 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addTeamToModal, removeTeamToModal, setModalValue } from '../../../../reducers/managementReducer'
+
 
 
 // -------------------------------------------------------------------------------------
 // Inside Modal box - One team checkbox
 // -------------------------------------------------------------------------------------
-export default function ({ modal, setModal, team}) {
+export default function ({team}) {
+
+    const dispatch = useDispatch()
+    const modal = useSelector(state => state.management.modal)
+    //const method = useSelector(state => state.method)
+
+    const [ isChecked, setIsChecked ] = useState(modal.value.includes(team.name))
 
     const handleCheckTeam = (event) => {
-        let newModal = { ...modal };
         if (event.currentTarget.checked) {
-            newModal.value.push(event.currentTarget.id);
+            dispatch(addTeamToModal(team.name))
+            setIsChecked(true)
         } else {
-            newModal.value.splice(
-                newModal.value.indexOf(event.currentTarget.id),
-                1
-            );
+            dispatch(removeTeamToModal(team.name))
+            setIsChecked(false)
         }
-        setModal(newModal);        
+        // Can't update modal whitout exiting the box 
+        //setModalValue(modal.value)
+        //console.log(modal.value)
     }
 
 // -------------------------------------------------------------------------------------
@@ -25,17 +34,17 @@ export default function ({ modal, setModal, team}) {
         <div className="column">
             <label
                 className="checkbox"
-                key={team}
+                htmlFor={team.id}
                 style={{ whiteSpace: "nowrap" }}
             >
             <input
-                id={team}
+                id={team.id}
                 type="checkbox"
-                checked={modal.value.includes(team)}
+                checked={isChecked}
                 onChange={handleCheckTeam}
             />
             {" "}
-            {team}
+            {team.name}
             </label>
         </div>
     )

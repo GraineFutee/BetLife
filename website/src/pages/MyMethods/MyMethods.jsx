@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux'
 
 import MethodManagementStep1 from "./parts/MethodManagementStep1";
 import MethodSummaryLine from "./MethodSummaryLine";
+import Simulation from './parts/Simulation'
 
-import {methodsFromDb} from '../../fakeDb'
+import { initializeMethods } from "../../reducers/methodsReducer";
+import { initializeMethod, backToNull } from "../../reducers/methodReducer";
+import { initializeExceptTeams } from "../../reducers/managementReducer";
+
 
 
 
@@ -12,38 +17,43 @@ import {methodsFromDb} from '../../fakeDb'
 // -------------------------------------------------------------------------------------
 export default function MyMethods() {
 
-  const [methods, setMethods] = useState(methodsFromDb);
+  const dispatch = useDispatch()
+  const methods = useSelector(state => state.methods)
+  const method = useSelector(state => state.method)
 
-  // Should be either a new method to create, or an existing one to modify
-  const [method, setMethod] = useState(null);
+  const displaySimulation = useSelector(state => state.management.displaySimulation)
 
+  // "Initialize" pick up methods into fakeDb, Should come from Each user own methods
+  useEffect(() => {
+    dispatch(initializeMethods())
+    dispatch(backToNull()) // Force the current method (new or to modify) to stay null - don't know why it is necessary
+  }, [dispatch]) // Maybe because of the dispatch dependencie, maybe not
+
+
+  const handleClickNewMethod = () => {
+    dispatch(initializeMethod())
+    dispatch(initializeExceptTeams())
+  }
 
 // -------------------------------------------------------------------------------------
   return (
     <>
       <section className="section">
+
         <div className="container">
 
-          <h1 className="title is-3">My Methods</h1>
+          <h2 className="title is-3">My Methods</h2>
 
           <table className="table">
             <tbody>
 
-              {methods.map((method) => 
-                <MethodSummaryLine 
-                  key={method.id}
-                  method={method}
-                  methods={methods}
-                  setMethod={setMethod}
-                  setMethods={setMethods}
-                />
-              )}
+            {methods.map((existingMethod) => <MethodSummaryLine method={existingMethod} key={existingMethod.id} /> )}
 
               <tr>
                 <td>
                   <button
                     className="button is-light is-small"
-                    onClick={() => setMethod({})}
+                    onClick={handleClickNewMethod}
                   >
                     <i className="fas fa-plus-circle"></i>
                   </button>
@@ -56,15 +66,11 @@ export default function MyMethods() {
         </div>
       </section>
 
-      {method && 
-        <MethodManagementStep1 
-          method={method} 
-          setMethod={setMethod}
-          methods={methods}
-          setMethods={setMethods}
-        />
-      }
+      {displaySimulation && <Simulation />}
+
+      {method && <MethodManagementStep1 />}
 
     </>
   );
 }
+ 

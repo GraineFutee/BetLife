@@ -1,57 +1,54 @@
 import React from "react";
+import { useDispatch, useSelector } from 'react-redux'
+
+import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../../../../reducers/methodReducer";
+
 
 
 // -------------------------------------------------------------------------------------
 // Condition - If "Odds" is chosen
 // -------------------------------------------------------------------------------------
-export default function OddsForm({condition, method, setMethod}) {
+export default function OddsForm({condition}) {
 
-    const index = condition.id
+    const dispatch = useDispatch()
+
+    const method = useSelector(state => state.method)
+    // Can do better than that
+    const index = method.conditions.findIndex((c) => c.id === condition.id)
 
 // -------------------------------------------------------------------------------------
     const handleChangeConditionOnWho = (event) => {
-        let newMethod = { ...method }
-        newMethod.conditions[index].onWho = event.currentTarget.value
-    
-        // Re-init condition.values to avoid conflicts
-        newMethod.conditions[index].value1 = ""
-        newMethod.conditions[index].value2 = ""
 
-          if (event.currentTarget.value === "On ..") {
-            newMethod.conditions[index].onWho = null
-          } 
-        setMethod(newMethod);
+        dispatch(setConditionOnWho(event.currentTarget.value, index))
+        // Re-init condition.values to avoid conflicts
+        dispatch(setConditionValue1("", index)) 
+        dispatch(setConditionValue2("", index)) 
+
     }
 
     const handleChangeLowestOdd = (event) => {
-        let newMethod = { ...method }
-        newMethod.conditions[index].value1 = event.currentTarget.value
 
         if (event.currentTarget.value < 1) {
-            newMethod.conditions[index].value1 = 1
+            dispatch(setConditionValue1(1, index))
+        } else if (event.currentTarget.value > 50) {
+            dispatch(setConditionValue1(50, index))
+        } else if (event.currentTarget.value > condition.value2) {
+            dispatch(setConditionValue2(event.currentTarget.value, index))
+            dispatch(setConditionValue1(event.currentTarget.value, index))
+        } else {
+            dispatch(setConditionValue1(event.currentTarget.value, index))
         }
-        if (event.currentTarget.value > 50) {
-            newMethod.conditions[index].value1 = 50
-        }
-        if (event.currentTarget.value > condition.value2) {
-            newMethod.conditions[index].value1 = condition.value2
-        }
-
-        setMethod(newMethod);
     }
 
     const handleChangeHighestOdd = (event) => {
-        let newMethod = { ...method }
-        newMethod.conditions[index].value2 = event.currentTarget.value
 
         if (event.currentTarget.value < condition.value1) {
-            newMethod.conditions[index].value2 = condition.value1
+            dispatch(setConditionValue2(condition.value1, index))
+        } else if (event.currentTarget.value > 50) {
+            dispatch(setConditionValue2(50, index))
+        } else {
+            dispatch(setConditionValue2(event.currentTarget.value, index))
         }
-        if (event.currentTarget.value > 50) {
-            newMethod.conditions[index].value2 = 50
-        }
-
-        setMethod(newMethod);
     }
 
 // -------------------------------------------------------------------------------------

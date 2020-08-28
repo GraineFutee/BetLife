@@ -1,37 +1,21 @@
 import React from "react";
+import { useDispatch, useSelector } from 'react-redux'
 
 import OddsForm from './OddsForm'
 import LastResultsForm from './LastResultsForm'
+import { setConditionOnWhat, deleteCondition } from "../../../../reducers/methodReducer";
 
 // -------------------------------------------------------------------------------------
 // Condition Line
 // -------------------------------------------------------------------------------------
-export default function Condition({ condition, method, setMethod }) {
+export default function Condition({condition}) {
 
-    const handleChangeConditionOnWhat = (event) => {
-        const index = condition.id
-        let newMethod = { ...method }
-        newMethod.conditions[index].onWhat = event.currentTarget.value
-    
-          if (event.currentTarget.value === "About ..") {
-            newMethod.conditions[index].onWhat = null
-          } 
-        setMethod(newMethod);
-    }
+    const dispatch = useDispatch()
 
-    const handleClickDeleteCondition = (event) => {
-        event.preventDefault()
+    const method = useSelector(state => state.method)
+    // Can do better than that
+    const index = method.conditions.findIndex((c) => c.id === condition.id)
 
-        let newMethod = { ...method }
-        newMethod.conditions.splice(
-            newMethod.conditions.findIndex(
-                (condition) =>
-                    condition.id === event.currentTarget.id
-            ),
-            1
-        );
-        setMethod(newMethod);
-    }
 
 // -------------------------------------------------------------------------------------
     return (
@@ -44,7 +28,7 @@ export default function Condition({ condition, method, setMethod }) {
                 <span className="select is-small">
                     <select
                         value={condition.onWhat ? condition.onWhat : "About .."}
-                        onChange={handleChangeConditionOnWhat}   
+                        onChange={ (event) => { dispatch(setConditionOnWhat(event.currentTarget.value, index)) } }   
                         required                 
                     >
                         <option>About ..</option>
@@ -55,25 +39,17 @@ export default function Condition({ condition, method, setMethod }) {
             </div>
 
             {condition.onWhat === "The Odds" ? 
-                <OddsForm 
-                    condition={condition}
-                    method={method}
-                    setMethod={setMethod}
-                /> :
-                condition.onWhat === "The Last Results" ? 
-                <LastResultsForm 
-                    condition={condition}
-                    method={method}
-                    setMethod={setMethod}
-                /> :
-                null
+                <OddsForm condition={condition} /> :
+                    condition.onWhat === "The Last Results" ? 
+                        <LastResultsForm condition={condition} /> :
+                            null
             }
 
             <div className="control">
                 <button
                     className="button is-danger is-small"
                     id={condition.id}
-                    onClick={handleClickDeleteCondition}
+                    onClick={(event) => {  dispatch(deleteCondition(condition.id)) }}
                 >
                     <i className="fas fa-trash-alt"></i>
                 </button>

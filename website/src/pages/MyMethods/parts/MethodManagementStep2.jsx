@@ -1,103 +1,66 @@
-import React, {useState} from "react";
+import React from "react";
+import { useDispatch, useSelector } from 'react-redux'
+
 import MethodManagementStep3 from "./MethodManagementStep3";
 import Buttons from "./Buttons";
 import Simulation from './Simulation'
 
+import { setBetHowMany, setCurrency, setBetOnWho, setPlayingWhere, setAgainstWho } from "../../../reducers/methodReducer";
+import { setDrawIsSelected, setModalFor, setModalValue, setDrawIsNotSelected } from "../../../reducers/managementReducer";
+
+
+
 // -------------------------------------------------------------------------------------
 // Second part of the form - Basic choices for betting method
 // -------------------------------------------------------------------------------------
-export default function MethodManagementStep2({ method, setMethod, setModal, methods, setMethods, setChampionshipIsDefine }) {
+export default function MethodManagementStep2() {
 
+    const dispatch = useDispatch()
     // Because need to disable some option when draw is picked
-    const [ drawIsSelected, setDrawIsSelected ] = useState(false)
+    const drawIsSelected = useSelector(state => state.management.drawIsSelected)
+    const displaySimulation = useSelector(state => state.management.displaySimulation)
 
-    const [ displaySimulation, setDisplaySimulation ] = useState(false)
+    const method = useSelector(state => state.method)
 
 
-// -------------------------------------------------------------------------------------
-    const handleChangeBetHowMany = (event) => {
-        let newMethod = { ...method }
-        newMethod.betHowMany = event.currentTarget.value
-
-        // Need to check here if we receive a suitable number ? 
-        if (event.currentTarget.value < 1) {
-            newMethod.betHowMany = 1
-        }
-        setMethod(newMethod);
-    }
-
-    const handleChangeCurrency = (event) => {
-        let newMethod = { ...method }
-        newMethod.currency = event.currentTarget.value
-        setMethod(newMethod);
-    }
+    // -------------------------------------------------------------------------------------
 
     const handleChangeBetOnWho = (event) => {
-        let newMethod = { ...method }
-        newMethod.betOnWho = event.currentTarget.value
-    
-          if (event.currentTarget.value === "Bet On Who?") {
-            newMethod.betOnWho = null
-          } 
-          if (event.currentTarget.value === "Specific(s) Team(s)") {
-            setModal({
-                active: true,
-                for: "betOnSpecific",
-                value: [],
-            })
-          }
+        if (event.currentTarget.value === "Specific(s) Team(s)") {
+            dispatch(setModalFor("betOnSpecific"))
+        } else {
+            dispatch(setBetOnWho(event.currentTarget.value))
+        }
 
-        setDrawIsSelected((event.currentTarget.value === "Draw"))
-        setMethod(newMethod);
-      }
-    
-    const handleChangePlayingWhere = (event) => {
-        let newMethod = { ...method }
-        newMethod.playingWhere = event.currentTarget.value
-    
-          if (event.currentTarget.value === "Where ?") {
-            newMethod.playingWhere = null
-          } 
-        setMethod(newMethod);
+        if (event.currentTarget.value === "Draw") {
+            dispatch(setDrawIsSelected())
+        } else {
+            dispatch(setDrawIsNotSelected())
+        }
     }
 
     const handleChangeAgainstWho = (event) => {
-        let newMethod = { ...method }
-        newMethod.againstWho = event.currentTarget.value
-    
-          if (event.currentTarget.value === "Against Who?") {
-            newMethod.againstWho = null
-          } 
-          if (event.currentTarget.value === "Specific(s) Team(s)") {
-            setModal({
-                active: true,
-                for: "againstSpecific",
-                value: [],
-            })
-          }
-        setMethod(newMethod);
+        if (event.currentTarget.value === "Specific(s) Team(s)") {
+            dispatch(setModalFor("againstSpecific"))
+        } else {
+            dispatch(setAgainstWho(event.currentTarget.value))
+        }
     }
 
     const handleClickBetOnWhoYourTeams = (event) => {
         event.preventDefault()
-        setModal({
-            active: true,
-            for: "betOnSpecific",
-            value: method.betOnWho,
-        })
+        dispatch(setModalFor("betOnSpecific"))
+        dispatch(setModalValue(method.betOnWho))
     }
 
     const handleClickAgainstWhoYourTeams = (event) => {
         event.preventDefault()
-        setModal({
-            active: true,
-            for: "againstSpecific",
-            value: method.againstWho,
-        })
+        dispatch(setModalFor("againstSpecific"))
+        dispatch(setModalValue(method.againstWho))
     }
 
 
-// -------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------
     return (
 
         <>
@@ -110,15 +73,15 @@ export default function MethodManagementStep2({ method, setMethod, setModal, met
                             type="number"
                             className="input is-small"
                             value={method.betHowMany}
-                            onChange={handleChangeBetHowMany}
+                            onChange={(event) => dispatch(setBetHowMany(event.currentTarget.value))}
                         />
                     </div>
 
                     <div className="control">
                         <span className="select is-small">
                             <select
-                                value={"€"}
-                                onChange={handleChangeCurrency}
+                                value={method.currency}
+                                onChange={(event) => dispatch(setCurrency(event.currentTarget.value))}
                             >
                                 <option>$</option>
                                 <option>£</option>
@@ -132,7 +95,7 @@ export default function MethodManagementStep2({ method, setMethod, setModal, met
                 <div className="control is-flex">
                     <label className="label is-small mt-2 mr-1" > On.. </label>
 
-                    {(typeof method.betOnWho !== 'object' || method.betOnWho === null) ? 
+                    {(typeof method.betOnWho !== 'object' || method.betOnWho === null) ?
                         <span className="select is-small">
                             <select
                                 value={method.betOnWho ? method.betOnWho : "Bet On Who?"}
@@ -145,82 +108,66 @@ export default function MethodManagementStep2({ method, setMethod, setModal, met
                             </select>
                         </span>
                         :
-                        <button 
+                        <button
                             className="button is-small is-info"
                             onClick={handleClickBetOnWhoYourTeams}
                         >
-                            Your Team(s)        
+                            Your Team(s)
                         </button>
-                        }
+                    }
                 </div>
 
                 {!drawIsSelected &&
-                <div className="control is-flex">
+                    <div className="control is-flex">
 
-                    <label className="label is-small mt-2 mr-1" > Playing.. </label>
+                        <label className="label is-small mt-2 mr-1" > Playing.. </label>
 
-                    <span className="select is-small">
-                        <select
-                            value={method.playingWhere ? method.playingWhere : "Where ?"}
-                            onChange={handleChangePlayingWhere}
-                        >
-                            <option>Where ?</option>
-                            <option>Home</option>
-                            <option>Away</option>
-                            <option>Home or Away</option>
-                        </select>
-                    </span>
-                </div>
-                }
-                {!drawIsSelected &&
-                <div className="control is-flex">
-                    <label className="label is-small mt-2 mr-1" > Against.. </label>
-
-                    {(typeof method.againstWho !== 'object' || method.againstWho === null) ? 
                         <span className="select is-small">
                             <select
-                                value={method.againstWho ? method.againstWho : "Against Who?"}
-                                onChange={handleChangeAgainstWho}
+                                value={method.playingWhere ? method.playingWhere : "Where ?"}
+                                onChange={(event) => dispatch(setPlayingWhere(event.currentTarget.value))}
                             >
-                                <option>Against Who?</option>
-                                <option>Any Teams</option>
-                                <option>Specific(s) Team(s)</option>
+                                <option>Where ?</option>
+                                <option>Home</option>
+                                <option>Away</option>
+                                <option>Home or Away</option>
                             </select>
                         </span>
-                        :
-                        <button 
-                            className="button is-small is-link"
-                            onClick={handleClickAgainstWhoYourTeams}
-                        >
-                            Your Team(s)        
+                    </div>
+                }
+                {!drawIsSelected &&
+                    <div className="control is-flex">
+                        <label className="label is-small mt-2 mr-1" > Against.. </label>
+
+                        {(typeof method.againstWho !== 'object' || method.againstWho === null) ?
+                            <span className="select is-small">
+                                <select
+                                    value={method.againstWho ? method.againstWho : "Against Who?"}
+                                    onChange={handleChangeAgainstWho}
+                                >
+                                    <option>Against Who?</option>
+                                    <option>Any Teams</option>
+                                    <option>Specific(s) Team(s)</option>
+                                </select>
+                            </span>
+                            :
+                            <button
+                                className="button is-small is-link"
+                                onClick={handleClickAgainstWhoYourTeams}
+                            >
+                                Your Team(s)
                         </button>
                         }
-                </div>
-                }           
+                    </div>
+                }
             </div>
 
+            <MethodManagementStep3 />
 
-            <MethodManagementStep3 
-                method={method}
-                setMethod={setMethod}
-            />
+            <Buttons />
 
-            <Buttons 
-                method={method}
-                setMethod={setMethod}
-                setModal={setModal}
-                methods={methods}
-                setMethods={setMethods}
-                setChampionshipIsDefine={setChampionshipIsDefine}
-                setDisplaySimulation={setDisplaySimulation}
-            />
+            {displaySimulation && <Simulation />}
 
-            {displaySimulation &&
-            <Simulation 
-                method={method}
-                setDisplaySimulation={setDisplaySimulation}
-            />
-            }
         </>
     );
 }

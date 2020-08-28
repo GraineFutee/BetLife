@@ -1,63 +1,54 @@
 import React from "react";
+import { useDispatch, useSelector } from 'react-redux'
+
+import { backToNull } from "../../../reducers/methodReducer";
+import { saveMethod } from "../../../reducers/methodsReducer";
+import { initializeExceptTeams, openSimulation } from "../../../reducers/managementReducer";
 
 
 // -------------------------------------------------------------------------------------
 // Submitting form - Save and Cancel buttons
 // -------------------------------------------------------------------------------------
-export default function ({ method, setMethod, setModal, methods, setMethods, setChampionshipIsDefine, setDisplaySimulation }) {
+export default function () {
 
+    const dispatch = useDispatch()
+    const method = useSelector(state => state.method)
 
-    const formatUserMethod = (method) => {
-        /*
-        Possibly check here in order to be sure to have a method in a classic format, see fakeDb
-        */
-        const goodMethod = {...method}
+    const cleanMethod = (method) => {
+        const cleanedMethod = {...method}
 
-        if (!goodMethod.name) {
-            goodMethod.name = "No_name"
-        }
-        if (!goodMethod.betHowMany) {
-            goodMethod.betHowMany = 1
-        }
-        if (!goodMethod.currency) {
-            goodMethod.currency = "€"
-        }
+        // Need to check all "undefined" parts - Should be done with help of reducers?
+        if (typeof cleanedMethod.name === 'undefined') { cleanedMethod.name = "No_Name" }
+        if (typeof cleanedMethod.betOnWho === 'undefined') { cleanedMethod.betOnWho = "All Teams" }
+        if (typeof cleanedMethod.playingWhere === 'undefined') { cleanedMethod.playingWhere = "Home" }
+        if (typeof cleanedMethod.againstWho === 'undefined') { cleanedMethod.againstWho = "Any Teams" }
 
-        goodMethod.id = Math.floor(Math.random() * 10000);
-        
-        const d = new Date()
-        goodMethod.creation = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`
-
-        return goodMethod
+        // Should check here if odd value are ok (value1 < value2)
+        return cleanedMethod
     }
 
     const handleClickSave = (event) => {
         event.preventDefault()
-        const formattedMethod = formatUserMethod(method)
 
+        console.log(method.name)
         // Need to Post here the new method into user methods
-        const newMethods = [...methods]
-        setMethods(newMethods.concat(formattedMethod))
+        dispatch(saveMethod(cleanMethod(method)))
 
-        const newMethod = null
-
-        setMethod(newMethod)
-        setModal({ active: false, for: "", value: [] });
-        setChampionshipIsDefine(false)
+        dispatch(backToNull())
+        dispatch(initializeExceptTeams())
     }
 
     const handleClickCancel = (event) => {
         event.preventDefault()
 
-        setMethod(null)
-        setModal({ active: false, for: "", value: [] });
-        setChampionshipIsDefine(false)
+        dispatch(backToNull())
+        dispatch(initializeExceptTeams())
     }
 
     const handleClickSimulate = (event) => {
         event.preventDefault()
 
-        setDisplaySimulation(true)
+        dispatch(openSimulation(method))
     }
 
     // -------------------------------------------------------------------------------------
@@ -65,21 +56,21 @@ export default function ({ method, setMethod, setModal, methods, setMethods, set
 
         <div className="buttons">
             <button
-                className="button is-success"
+                className="button is-rounded is-small is-success"
                 onClick={handleClickSave}
             >
                 Save
             </button>
 
             <button
-                className="button is-info"
+                className="button is-rounded is-small is-link"
                 onClick={handleClickSimulate}
             >
                 Simulate
             </button>
 
             <button
-                className="button is-danger"
+                className="button is-rounded is-small is-danger"
                 onClick={handleClickCancel}
             >
                 Cancel
