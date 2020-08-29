@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 
-import MyMethods from "./pages/myMethods/MyMethods";
+import MyMethodsHome from "./pages/myMethods/MyMethodsHome";
 import HomePage from './pages/home/HomePage'
 import NavBar from './pages/NavBar'
 import Footer from './pages/Footer'
@@ -15,7 +15,7 @@ function App() {
       <Switch>
 
         <Route path="/myMethods">
-          <MyMethods />
+          <MyMethodsHome />
         </Route>
 
         <Route path="/">

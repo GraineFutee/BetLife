@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setBetOnWho } from '../../../reducers/methodReducer';
 
 
+// Todo => Merge the two components
+// => "method" come from reducers, but only use of method.betOnWho
+
 // -------------------------------------------------------------------------------------
 // Modal box - Choose one or more team(s)
 // -------------------------------------------------------------------------------------

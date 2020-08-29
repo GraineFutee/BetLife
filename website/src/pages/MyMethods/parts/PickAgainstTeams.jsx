@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setAgainstWho } from '../../../reducers/methodReducer';
 
 
+// Todo => Merge the two components
+// => "method" come from reducers, but only use of method.againstWho
+
 // -------------------------------------------------------------------------------------
 // Modal box - Choose one or more team(s)
 // -------------------------------------------------------------------------------------
@@ -13,7 +16,8 @@ export default function ({setDisplayPickAgainstTeams}) {
   const teams = useSelector(state => state.management.teams)
   const method = useSelector(state => state.method)
 
-  const [pickedTeams, setPickedTeams] = useState( (typeof method.betOnWho === 'object' && method.betOnWho !== null) ? method.betOnWho : [])
+  // Only used inside this Component
+  const [pickedTeams, setPickedTeams] = useState( (typeof method.againstWho === 'object' && method.againstWho !== null) ? method.agaisntWho : [])
 
   // -------------------------------------------------------------------------------------
   const handleClickSave = (event) => {
@@ -28,9 +32,9 @@ export default function ({setDisplayPickAgainstTeams}) {
     setDisplayPickAgainstTeams(false)
   }
 
+
   const handleCheckTeam = (event, teamName) => {
     if (event.currentTarget.checked) {
-
         const newPickedTeams = [...pickedTeams]
         newPickedTeams.push(teamName)
         setPickedTeams(newPickedTeams)

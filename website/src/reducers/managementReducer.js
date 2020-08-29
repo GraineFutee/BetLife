@@ -1,9 +1,8 @@
-// Reducer for all variables useful inside the method management form
+// Reducer for all others variables useful inside the method management form
 
 const initialState = {
     championshipIsDefine: false,
     teams: [],
-    drawIsSelected: false,
     displaySimulation: false,
     simulatedMethod: null
 }
@@ -21,15 +20,7 @@ export const setChampionshipIsDefine = () => {
     return { type: 'CHAMPIONSHIP_DEFINED' }
 }
 
-// Can use one for this
-export const setDrawIsSelected = () => {
-    return { type: 'DRAW_SELECTED' }
-}
-export const setDrawIsNotSelected = () => {
-    return { type: 'DRAW_NOT_SELECTED' }
-}
-
-// Can use one for this too
+// Can use one for this ?
 export const openSimulation = (method) => {
     return { type: 'OPEN_SIMULATION', data: method }
 }
@@ -64,14 +55,6 @@ const managementReducer = (state = initialState, action) => {
             newState.championshipIsDefine = true
             return newState 
             
-        case 'DRAW_SELECTED' :
-            newState.drawIsSelected = true
-            return newState 
-
-        case 'DRAW_NOT_SELECTED' :
-            newState.drawIsSelected = false
-            return newState 
-
         case 'CLOSE_SIMULATION' :
             newState.displaySimulation = false
             newState.simulatedMethod = null

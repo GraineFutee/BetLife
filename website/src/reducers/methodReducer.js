@@ -2,7 +2,7 @@
 //---------------------------------------------------------------------------------
 
 const generateID = () => {
-    // Considering, now, that a random ID < 10000 is enough
+    // Considering, now, that a random ID < 100000 is enough
     return Math.floor(Math.random() * 100000)
 }
 

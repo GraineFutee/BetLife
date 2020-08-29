@@ -1,12 +1,13 @@
 import React from "react";
 import { useDispatch } from 'react-redux'
 
-import { modifyExisting } from "../../reducers/methodReducer";
-import { deleteOne } from "../../reducers/methodsReducer";
-import { setChampionshipIsDefine, openSimulation } from "../../reducers/managementReducer";
+// State from reducers
+import { modifyExisting } from "../../../reducers/methodReducer";
+import { deleteOne } from "../../../reducers/methodsReducer";
+import { setChampionshipIsDefine, openSimulation } from "../../../reducers/managementReducer";
 
 
-// Todo : Add a simulate button
+
 // -------------------------------------------------------------------------------------
 // Line of Each Method Summary
 // -------------------------------------------------------------------------------------

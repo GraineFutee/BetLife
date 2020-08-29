@@ -1,25 +1,27 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
-import Condition from "./conditions/Condition";
+// Components
+import Condition from "./parts/Condition";
 
-import { initConditions, addCondition } from "../../../reducers/methodReducer";
+// State from reducers
+import { initConditions, addCondition } from "../../reducers/methodReducer";
 
 
 // -------------------------------------------------------------------------------------
-// Third part of the form - Add conditions
+// Third part of the form - Add conditions (2 maximum)
 // -------------------------------------------------------------------------------------
 export default function MethodManagementStep2() {
 
     const dispatch = useDispatch()
+    // Pick only the needed part from the method
+    const conditions = useSelector(state => state.method.conditions)
 
-    const method = useSelector(state => state.method)
 
-    
     const handleClickAddCondition = (event) => {
         event.preventDefault()
 
-        if (!method.conditions) { dispatch(initConditions()) } 
+        if (!conditions) { dispatch(initConditions()) } 
         else { dispatch(addCondition()) }
 
     }
@@ -28,13 +30,13 @@ export default function MethodManagementStep2() {
     return (
         
         <div className="box">
-            {method.conditions &&
-                method.conditions.map((condition) => 
+            {conditions &&
+                conditions.map((condition) => 
                     <Condition key={condition.id} condition={condition} />
                 )
             }
 
-            {(!method.conditions || method.conditions.length < 2) &&
+            {(!conditions || conditions.length < 2) &&
             <button 
                 className="button is-small is-light"
                 onClick={handleClickAddCondition}
@@ -42,7 +44,6 @@ export default function MethodManagementStep2() {
                 Add Condition
             </button>
             }
-
         </div>
     );
 }

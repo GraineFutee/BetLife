@@ -1,4 +1,5 @@
 import React from 'react';
+import LoginForm from './LoginForm';
 
 
 // -------------------------------------------------------------------------------------
@@ -7,10 +8,18 @@ import React from 'react';
 export default function HomePage() {
 
 
-// -------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------
   return (
-    <section className="section is-large">
-        Welcome here, log in and begin to build your own betting strategies !
+    <section
+      className="section has-text-centered"
+      style={{ minHeight: "95vh" }}
+    >
+      <div className="title is-4">
+        <p>Welcome here, log in and begin to build your own betting strategies !</p>
+      </div>
+
+      <LoginForm />
+
     </section>
   );
 }

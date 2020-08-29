@@ -1,10 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
+// Components
 import OddsForm from './OddsForm'
 import LastResultsForm from './LastResultsForm'
 
-import { setConditionOnWhat, deleteCondition } from "../../../../reducers/methodReducer";
+// State from reducers
+import { setConditionOnWhat, deleteCondition } from "../../../reducers/methodReducer";
+
+
+// TODO => Deal with conditions ID instead of conditions Index (?)
 
 
 // -------------------------------------------------------------------------------------

@@ -1,8 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
-import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../../../../reducers/methodReducer";
+import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../../../reducers/methodReducer";
 
+
+// Todo => Remove method which is imported only to find the index of the condition -> use ID
+// => Check if there is no conflict when User enter a number by keyboard use 
 
 
 // -------------------------------------------------------------------------------------

@@ -1,14 +1,18 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
 
+// Components
 import MethodManagementStep2 from './MethodManagementStep2'
 
-import { setChampionship, setName } from "../../../reducers/methodReducer";
-import { setChampionshipIsDefine } from "../../../reducers/managementReducer";
+// State from reducers
+import { setChampionship, setName } from "../../reducers/methodReducer";
+import { setChampionshipIsDefine, initializeTeams } from "../../reducers/managementReducer";
+
 
 
 // -------------------------------------------------------------------------------------
-// First part of the form - Choice of championship - Dealing with the method state 
+// First part of the form - Choice of championship 
 // -------------------------------------------------------------------------------------
 export default function MethodManagementStep1() {
 
@@ -16,8 +20,24 @@ export default function MethodManagementStep1() {
   // Championship is the first option to define, can't go further without
   const championshipIsDefine = useSelector(state => state.management.championshipIsDefine)
 
-  const method = useSelector(state => state.method)
-  console.log(method)
+  const method = useSelector(state => state.method) // Either new one (null) or existing one
+  console.log(method) // Keep an eye on each step of method building
+
+  // Get all teams reagarding the championship (right now, only one championship)
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const result = await axios(
+          `https://betlifeback.herokuapp.com/api/teams/championship/${1}`
+        );
+        dispatch(initializeTeams(result.data));
+      } catch (error) {
+        console.log(error);
+     }
+    };
+    fetchTeams();
+  }, [dispatch]);
+
 
 // -------------------------------------------------------------------------------------
 
@@ -25,34 +45,6 @@ export default function MethodManagementStep1() {
     dispatch(setChampionship(event.currentTarget.value))
     dispatch(setChampionshipIsDefine())
   }
-
-  /*
-  const handleChangeName = (event) => {
-    dispatch(setName(event.currentTarget.value))
-  }
-  
-    let newMethod = { ...method }
-    newMethod.championship = event.currentTarget.value
-
-      if (event.currentTarget.value === "Championship") {
-        newMethod.championship = null
-        setChampionshipIsDefine(false)
-      } else {
-        setChampionshipIsDefine(true)
-      }
-
-    setMethod(newMethod);
-  }
-
-  const handleChangeName = (event) => {
-    let newMethod = { ...method }
-    newMethod.name = event.currentTarget.value
-
-    if (event.currentTarget.value === "") {
-      newMethod.name = null
-    }
-    setMethod(newMethod);
-  }*/
 
 
 // -------------------------------------------------------------------------------------

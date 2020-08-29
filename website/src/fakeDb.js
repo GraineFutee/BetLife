@@ -1,67 +1,41 @@
-// Let's consider, for now, a "complete" method looking like that :
-/*
-    method = {
-        id:,
-        championship:,
-        name:,
-        creation:,
-        summary:,
-        betHowMany:,
-        currency:,
-        betOnWho:,
-        playingWhere:,
-        againstWho:,
-        conditions:[
-            {
-                onWhat:,
-                onWho:,
-                value1:,
-                value2:
-            }
-        ]
-    }
-*/
-
 export const methodsFromDb = [
     // Initialize with User own methods
     {
-        id: 1,
+        id: 11109,
         championship: "Premier League",
-        name: "Test 1",
-        creation: "2020-06-25",
-        summary: "Test method",
+        name: "ManchesterS",
+        creation: "25/06/2019",
         betHowMany: 10,
-        currency: "$",
-        betOnWho: ["Team1", "Team2"],
-        playingWhere: "Home",
-        againstWho: "",
+        currency: "£",
+        betOnWho: ["Man United", "Man City"],
+        playingWhere: "Home or Away",
+        againstWho: "Any Teams",
         conditions:[
             {
+                id : 4456,
                 onWhat: "The Odds",
-                onWho: "Home Team",
-                value1: 2.3,
+                onWho: "The Team I bet",
+                value1: 1.3,
                 value2: 2.8
+            },
+            {
+                id : 486,
+                onWhat: "The Last Results",
+                onWho: "The Team I bet",
+                value1: "Didn't Lose",
+                value2: 1
             }
         ]
     },
     {
-        id: 2,
+        id: 26890,
         championship: "Premier League",
-        name: "Idée du siècle",
-        creation: "2020-07-14",
-        summary: "Always OM",
+        name: "QPR Home",
+        creation: "14/07/2020",
         betHowMany: 100,
         currency: "€",
-        betOnWho: ["Team1"],
-        playingWhere: "",
-        againstWho: "Any Teams",
-        conditions:[
-            {
-                onWhat: "",
-                onWho: "",
-                value1: "",
-                value2: ""
-            }
-        ]
+        betOnWho: ["QPR"],
+        playingWhere: "Home",
+        againstWho: "Any Teams"
     }
   ]

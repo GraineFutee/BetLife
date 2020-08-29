@@ -1,14 +1,21 @@
 import React, {useState} from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
+// Components
 import MethodManagementStep3 from "./MethodManagementStep3";
 import Buttons from "./Buttons";
-import Simulation from './Simulation'
-import PickBetTeams from './PickBetTeams'
-import PickAgainstTeams from './PickAgainstTeams'
+import Simulation from './parts/Simulation'
+import PickBetTeams from './parts/PickBetTeams'
+import PickAgainstTeams from './parts/PickAgainstTeams'
 
-import { setBetHowMany, setCurrency, setBetOnWho, setPlayingWhere, setAgainstWho } from "../../../reducers/methodReducer";
-import { setDrawIsSelected, setDrawIsNotSelected } from "../../../reducers/managementReducer";
+// State from reducers
+import { setBetHowMany, setCurrency, setBetOnWho, setPlayingWhere, setAgainstWho } from "../../reducers/methodReducer";
+
+
+
+// Todo : use only one components for "PickBetTeams" and "PickAgainstTeams"
+// And maybe get Teams from DB only inside - cause no need somewhere else ?
+// Maybe not a good idea - cause means a GET request each time is open..  ?
 
 
 
@@ -18,15 +25,16 @@ import { setDrawIsSelected, setDrawIsNotSelected } from "../../../reducers/manag
 export default function MethodManagementStep2() {
 
     const dispatch = useDispatch()
-    // Because need to disable some option when draw is picked
-    const drawIsSelected = useSelector(state => state.management.drawIsSelected)
+    const method = useSelector(state => state.method)
     const displaySimulation = useSelector(state => state.management.displaySimulation)
 
-    // Push this into reducers
+    // Those variables are only useful inside this component - No use of Redux
+    // Disable some options when draw is picked
+    const [ drawIsSelected, setDrawIsSelected ] = useState(method.betOnWho === "Draw" ? true : false)
+    // Open a specific Window for Team's choices
     const [ displayPickBetTeams, setDisplayPickBetTeams ] = useState(false)
     const [ displayPickAgainstTeams, setDisplayPickAgainstTeams ] = useState(false)
 
-    const method = useSelector(state => state.method)
 
 
     // -------------------------------------------------------------------------------------
@@ -40,9 +48,9 @@ export default function MethodManagementStep2() {
         }
 
         if (event.currentTarget.value === "Draw") {
-            dispatch(setDrawIsSelected())
+            setDrawIsSelected(true)
         } else {
-            dispatch(setDrawIsNotSelected())
+            setDrawIsSelected(false)
         }
     }
 

@@ -1,12 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
-import { backToNull } from "../../../reducers/methodReducer";
-import { saveMethod } from "../../../reducers/methodsReducer";
-import { initializeExceptTeams, openSimulation } from "../../../reducers/managementReducer";
+import { backToNull } from "../../reducers/methodReducer";
+import { saveMethod } from "../../reducers/methodsReducer";
+import { initializeExceptTeams, openSimulation } from "../../reducers/managementReducer";
 
 
 // Todo => Saving an already existing method should update and not build a new one
+// => Check the good shape of the method we are going to POST
+// either by the "cleanMethod" function, or an other way
+
 
 // -------------------------------------------------------------------------------------
 // Submitting form - Save and Cancel buttons
@@ -16,6 +19,7 @@ export default function () {
     const dispatch = useDispatch()
     const method = useSelector(state => state.method)
 
+    // -------------------------------------------------------------------------------------
     const cleanMethod = (method) => {
         const cleanedMethod = {...method}
 
@@ -33,8 +37,7 @@ export default function () {
     const handleClickSave = (event) => {
         event.preventDefault()
 
-        console.log(method.name)
-        // Need to Post here the new method into user methods
+        // POST request
         dispatch(saveMethod(cleanMethod(method)))
 
         dispatch(backToNull())

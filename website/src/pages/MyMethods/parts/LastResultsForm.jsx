@@ -1,7 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
-import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../../../../reducers/methodReducer";
+// State from reducers
+import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../../../reducers/methodReducer";
+
+
+// Todo => Remove method which is imported only to find the index of the condition -> use ID
 
 
 // -------------------------------------------------------------------------------------
@@ -10,6 +14,7 @@ import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../..
 export default function LastResultsForm({condition}) {
 
     const dispatch = useDispatch()
+
 
     const method = useSelector(state => state.method)
     // Can do better than that
