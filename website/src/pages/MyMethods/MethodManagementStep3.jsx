@@ -17,12 +17,16 @@ export default function MethodManagementStep2() {
     // Pick only the needed part from the method
     const conditions = useSelector(state => state.method.conditions)
 
+    const generateID = () => {
+        // Considering that a random ID < 1000 is enough (only 2 conditions)
+        return Math.floor(Math.random() * 1000)
+    }
 
     const handleClickAddCondition = (event) => {
         event.preventDefault()
 
-        if (!conditions) { dispatch(initConditions()) } 
-        else { dispatch(addCondition()) }
+        if (!conditions) { dispatch(initConditions(generateID())) } 
+        else { dispatch(addCondition(generateID())) }
 
     }
 

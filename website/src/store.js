@@ -1,4 +1,6 @@
 import { createStore, combineReducers } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
+
 import methodReducer from './reducers/methodReducer'
 import methodsReducer from './reducers/methodsReducer'
 import managementReducer from './reducers/managementReducer'
@@ -10,6 +12,6 @@ const reducer = combineReducers({
     management: managementReducer
   })
 
-const store = createStore(reducer)
+const store = createStore(reducer, composeWithDevTools())
 
 export default store

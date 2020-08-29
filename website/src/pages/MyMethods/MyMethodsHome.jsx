@@ -8,13 +8,9 @@ import Simulation from './parts/Simulation'
 
 // State from reducers
 import { initializeMethods } from "../../reducers/methodsReducer";
-import { initializeMethod, backToNull } from "../../reducers/methodReducer";
-import { initializeExceptTeams } from "../../reducers/managementReducer";
+import { backToNull, setId, setDate, setBetHowMany, setCurrency } from "../../reducers/methodReducer";
 
 
-// Todo => Check line 36/37 if really necessary
-// Possibility => Hide button for new method when a method is already opened
-// User have to Cancel/Save the previous one before asking a new one
 
 
 // -------------------------------------------------------------------------------------
@@ -34,9 +30,21 @@ export default function MyMethods() {
   }, [dispatch])
 
 
+  const generateID = () => {
+      // Considering, now, that a random ID < 100000 is enough
+      return Math.floor(Math.random() * 100000)
+  }
+
+  const generateDate = () => {
+      const d = new Date()
+      return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`
+  }
+
   const handleClickNewMethod = () => {
-    dispatch(initializeMethod())   // Initialize in case button is clicked when a method is already opened
-    dispatch(initializeExceptTeams())
+    dispatch(setId(generateID()))
+    dispatch(setDate(generateDate()))
+    dispatch(setBetHowMany(1))
+    dispatch(setCurrency("€"))
   }
 
   // -------------------------------------------------------------------------------------
@@ -64,8 +72,10 @@ export default function MyMethods() {
         <div className="column has-text-centered">
           <p className="content mb-2">Create a new Method</p>
           <button
-            className="button is-light is-small"
+            className="button is-light is-small has-tooltip-bottom has-tooltip-multiline has-tooltip-info"
+            data-tooltip={method !== null ? "Save or Cancel the current method before create a new one" : null}
             onClick={handleClickNewMethod}
+            disabled={method !== null}
           >
             <i className="fas fa-plus-circle"></i>
           </button>

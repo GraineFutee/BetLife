@@ -1,23 +1,18 @@
 import React from "react";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { setConditionOnWho, setConditionValue1, setConditionValue2 } from "../../../reducers/methodReducer";
 
 
-// Todo => Remove method which is imported only to find the index of the condition -> use ID
-// => Check if there is no conflict when User enter a number by keyboard use 
+// Todo => Check if there is no conflict when User enter a number by keyboard use 
 
 
 // -------------------------------------------------------------------------------------
 // Condition - If "Odds" is chosen
 // -------------------------------------------------------------------------------------
-export default function OddsForm({condition}) {
+export default function OddsForm({condition, index}) {
 
     const dispatch = useDispatch()
-
-    const method = useSelector(state => state.method)
-    // Can do better than that
-    const index = method.conditions.findIndex((c) => c.id === condition.id)
 
 // -------------------------------------------------------------------------------------
     const handleChangeConditionOnWho = (event) => {

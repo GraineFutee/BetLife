@@ -18,9 +18,8 @@ import { setConditionOnWhat, deleteCondition } from "../../../reducers/methodRed
 export default function Condition({condition}) {
 
     const dispatch = useDispatch()
-
     const method = useSelector(state => state.method)
-    // Can do better than that
+
     const index = method.conditions.findIndex((c) => c.id === condition.id)
 
 
@@ -46,9 +45,9 @@ export default function Condition({condition}) {
             </div>
 
             {condition.onWhat === "The Odds" ? 
-                <OddsForm condition={condition} /> :
+                <OddsForm condition={condition} index={index} /> :
                     condition.onWhat === "The Last Results" ? 
-                        <LastResultsForm condition={condition} /> :
+                        <LastResultsForm condition={condition} index={index}/> :
                             null
             }
 
@@ -56,7 +55,7 @@ export default function Condition({condition}) {
                 <button
                     className="button is-danger is-small"
                     id={condition.id}
-                    onClick={(event) => {  dispatch(deleteCondition(condition.id)) }}
+                    onClick={(event) => {  dispatch(deleteCondition(index)) }}
                 >
                     <i className="fas fa-trash-alt"></i>
                 </button>

@@ -12,14 +12,14 @@ export const methodsFromDb = [
         againstWho: "Any Teams",
         conditions:[
             {
-                id : 4456,
+                id : 446,
                 onWhat: "The Odds",
                 onWho: "The Team I bet",
                 value1: 1.3,
                 value2: 2.8
             },
             {
-                id : 486,
+                id : 186,
                 onWhat: "The Last Results",
                 onWho: "The Team I bet",
                 value1: "Didn't Lose",

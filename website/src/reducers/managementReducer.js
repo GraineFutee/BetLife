@@ -8,8 +8,8 @@ const initialState = {
 }
 
 
-export const initializeExceptTeams = () => {
-    return { type: 'INITIALIZE_EXCEPT_TEAMS'}
+export const initializeManagement = () => {
+    return { type: 'INITIALIZE_MANAGEMENT'}
 }
 
 export const initializeTeams = (teams) => {
@@ -37,15 +37,8 @@ const managementReducer = (state = initialState, action) => {
     let newState = {...state}
 
     switch (action.type) {
-        case 'INITIALIZE_EXCEPT_TEAMS' :
-            return {
-                championshipIsDefine: false,
-                modal: { active: false, for: "", value: [] },
-                teams: state.teams,
-                drawIsSelected: false,
-                displaySimulation: false,
-                simulatedMethod: null
-            }
+        case 'INITIALIZE_MANAGEMENT' :
+            return initialState
         
         case 'INIT_TEAMS' :
             newState.teams = action.data

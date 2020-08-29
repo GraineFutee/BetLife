@@ -1,13 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux'
 
-import { backToNull } from "../../reducers/methodReducer";
-import { saveMethod } from "../../reducers/methodsReducer";
-import { initializeExceptTeams, openSimulation } from "../../reducers/managementReducer";
+import { backToNull, setId } from "../../reducers/methodReducer";
+import { saveMethod, deleteOne } from "../../reducers/methodsReducer";
+import { initializeManagement, openSimulation } from "../../reducers/managementReducer";
 
 
-// Todo => Saving an already existing method should update and not build a new one
-// => Check the good shape of the method we are going to POST
+// Todo => Check the good shape of the method we are going to POST
 // either by the "cleanMethod" function, or an other way
 
 
@@ -18,6 +17,7 @@ export default function () {
 
     const dispatch = useDispatch()
     const method = useSelector(state => state.method)
+    const methods = useSelector(state => state.methods)
 
     // -------------------------------------------------------------------------------------
     const cleanMethod = (method) => {
@@ -37,18 +37,26 @@ export default function () {
     const handleClickSave = (event) => {
         event.preventDefault()
 
-        // POST request
-        dispatch(saveMethod(cleanMethod(method)))
+        if (methods.includes(methods.find((mtd) => mtd.id === method.id ))) {
+            // UPDATE
+            const oldMethodId = method.id
+            dispatch(setId(method.id+1)) // Give an other id to avoid conflict
+            dispatch(deleteOne(oldMethodId)) // Remove the old one
+            dispatch(saveMethod(cleanMethod(method))) // Save the new one
+        } else {
+            // POST
+            dispatch(saveMethod(cleanMethod(method)))
+        }
 
         dispatch(backToNull())
-        dispatch(initializeExceptTeams())
+        dispatch(initializeManagement())
     }
 
     const handleClickCancel = (event) => {
         event.preventDefault()
 
         dispatch(backToNull())
-        dispatch(initializeExceptTeams())
+        dispatch(initializeManagement())
     }
 
     const handleClickSimulate = (event) => {

@@ -6,7 +6,7 @@ import axios from 'axios'
 import MethodManagementStep2 from './MethodManagementStep2'
 
 // State from reducers
-import { setChampionship, setName } from "../../reducers/methodReducer";
+import { setChampionship, setName, backToNull } from "../../reducers/methodReducer";
 import { setChampionshipIsDefine, initializeTeams } from "../../reducers/managementReducer";
 
 
@@ -46,6 +46,11 @@ export default function MethodManagementStep1() {
     dispatch(setChampionshipIsDefine())
   }
 
+  const handleClickCancel = (event) => {
+    event.preventDefault()
+    dispatch(backToNull())
+}
+
 
 // -------------------------------------------------------------------------------------
   return (
@@ -83,6 +88,15 @@ export default function MethodManagementStep1() {
                   onChange={(event) => dispatch(setName(event.currentTarget.value))}
                 />
               </div>
+
+              {!championshipIsDefine &&
+                <button
+                  className="button is-rounded is-small is-danger"
+                  onClick={handleClickCancel}
+                >
+                  Cancel
+                </button>
+              }
             </div>
 
             {championshipIsDefine ? <MethodManagementStep2 /> :  null  }

@@ -1,30 +1,22 @@
 // 'method' variable represent the method user are currently creating or modifting
 //---------------------------------------------------------------------------------
 
-const generateID = () => {
-    // Considering, now, that a random ID < 100000 is enough
-    return Math.floor(Math.random() * 100000)
-}
-
-const generateDate = () => {
-    const d = new Date()
-    return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`
-}
-
-
-//---------------------------------------------------------------------------------
 const initialState = null
 
 export const backToNull = () => {
     return { type: 'NULL'}
 }
 
-export const initializeMethod = () => {
-    return { type: 'INITIALIZE'}
-}
-
 export const modifyExisting = (method) => {
     return { type: 'MODIFY_EXISTING', data: method}
+}
+
+export const setId = (id) => {
+    return { type: 'SET_ID', data: { id: id } }
+}
+
+export const setDate = (date) => {
+    return { type: 'SET_DATE', data: { date: date } }
 }
 
 export const setChampionship = (championship) => {
@@ -55,16 +47,16 @@ export const setAgainstWho = (againstWho) => {
     return { type: 'SET_AGAINST_WHO', data: { againstWho: againstWho } }
 }
 
-export const initConditions = () => {
-    return { type: 'INIT_CONDITIONS' }
+export const initConditions = (id) => {
+    return { type: 'INIT_CONDITIONS', data: { id: id}  }
 }
 
-export const addCondition = () => {
-    return { type: 'ADD_CONDITION' }
+export const addCondition = (id) => {
+    return { type: 'ADD_CONDITION', data: { id: id} }
 }
 
-export const deleteCondition = (id) => {
-    return { type: 'DELETE_CONDITION', data: { id: id } }
+export const deleteCondition = (index) => {
+    return { type: 'DELETE_CONDITION', data: { index: index } }
 }
 
 export const setConditionOnWhat = (conditionOnWhat, index) => {
@@ -91,15 +83,20 @@ export const setConditionValue2 = (conditionValue2, index) => {
 
 const methodReducer = (state = initialState, action) => {
     //console.log('state now: ', state)
-    console.log('action', action)
+    //console.log('action', action)
     const newMethod = { ...state }
 
     switch (action.type) {
         case 'NULL' :
             return null
 
-        case 'INITIALIZE' :
-            return { id: generateID(), creation: generateDate(), betHowMany: 1, currency: "€" }
+        case 'SET_ID' :
+            newMethod.id = action.data.id
+            return newMethod
+
+        case 'SET_DATE' :
+            newMethod.date = action.data.date
+            return newMethod
 
         case 'MODIFY_EXISTING' :
             return action.data
@@ -133,15 +130,15 @@ const methodReducer = (state = initialState, action) => {
             return newMethod
 
         case 'INIT_CONDITIONS' :
-            newMethod.conditions = [{ id: generateID(), onWhat: "", onWho: "", value1: "", value2: "" }]
+            newMethod.conditions = [{ id: action.data.id, onWhat: "", onWho: "", value1: "", value2: "" }]
             return newMethod
 
         case 'ADD_CONDITION' :
-            newMethod.conditions.push({ id: generateID(), onWhat: "", onWho: "", value1: "", value2: "" })
+            newMethod.conditions.push({ id: action.data.id, onWhat: "", onWho: "", value1: "", value2: "" })
             return newMethod
             
         case 'DELETE_CONDITION' :
-            newMethod.conditions.splice( newMethod.conditions.findIndex( (condition) => condition.id === action.data.id  ),1 )
+            newMethod.conditions.splice(action.data.index,1 )
             return newMethod
                 
         case 'SET_CONDITION_ON_WHAT' :
